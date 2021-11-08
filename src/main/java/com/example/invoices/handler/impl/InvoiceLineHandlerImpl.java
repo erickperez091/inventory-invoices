@@ -1,10 +1,8 @@
 package com.example.invoices.handler.impl;
 
 import com.example.common.entitty.EnumUtil.EventType;
-import com.example.common.entitty.EnumUtil.UUIDType;
 import com.example.common.entitty.MessageEvent;
 import com.example.common.utilities.ConverterUtil;
-import com.example.common.utilities.IdUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.handler.InvoiceLineHandler;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,20 +29,24 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceLineHandlerImpl.class );
 
-    @Autowired
     private InvoiceLineService invoiceLineService;
-
-    @Autowired
     private InvoiceProducer invoiceProducer;
-
-    @Autowired
     private InvoiceService invoiceService;
+    private ConverterUtil converterUtil;
 
     @Value( "${invoice.discount.percent:0.0}" )
     private BigDecimal discountPercentage;
 
     @Value( "${invoice.tax.percent:0.0}" )
     private BigDecimal taxPercentage;
+
+    @Autowired
+    public InvoiceLineHandlerImpl(InvoiceLineService invoiceLineService, InvoiceProducer invoiceProducer, InvoiceService invoiceService, ConverterUtil converterUtil) {
+        this.invoiceLineService = invoiceLineService;
+        this.invoiceProducer = invoiceProducer;
+        this.invoiceService = invoiceService;
+        this.converterUtil = converterUtil;
+    }
 
     @Override
     public ResponseEntity<Object> getInvoiceLinesByInvoice ( String invoice_id ) {
@@ -69,7 +70,7 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
                 Optional<InvoiceLine> optionalInvoiceLine = invoiceFromDb.getInvoiceLines( ).stream( ).filter( il -> il.getProductId( ).equals( invoiceLine.getProductId( ) ) ).findFirst( );
                 if ( optionalInvoiceLine.isPresent( ) ) {
                     InvoiceLine invoiceLineFromDb = optionalInvoiceLine.get( );
-                    ConverterUtil.copyProperties( invoiceLine, invoiceLineFromDb );
+                    this.converterUtil.copyProperties( invoiceLine, invoiceLineFromDb );
                 } else {
                     invoiceFromDb.getInvoiceLines( ).add( invoiceLine );
                 }
@@ -77,7 +78,7 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
         }
         assert invoiceFromDb != null;
         invoiceFromDb.calculateTotal( discountPercentage, taxPercentage );
-        Map<String, Object> payload = ConverterUtil.objectToMap( invoiceFromDb );
+        Map<String, Object> payload = this.converterUtil.objectToMap( invoiceFromDb );
         MessageEvent messageEvent = new MessageEvent( EventType.UPDATE_INVOICE, payload );
         invoiceProducer.sendMessage( messageEvent );
         return new ResponseEntity<>( invoiceFromDb, HttpStatus.FOUND );

@@ -1,13 +1,8 @@
 package com.example.invoices.controller;
 
-import com.example.common.entitty.EnumUtil;
-import com.example.common.entitty.MessageEvent;
-import com.example.common.utilities.ConverterUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.handler.InvoiceHandler;
-import com.example.invoices.producer.InvoiceProducer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/invoice/v1")
 public class InvoiceController {
 
-    @Autowired
     private InvoiceHandler invoiceHandler;
+
+    @Autowired
+    public InvoiceController(InvoiceHandler invoiceHandler) {
+        this.invoiceHandler = invoiceHandler;
+    }
 
     @GetMapping( value = "ping" )
     public ResponseEntity<String> ping ( ) {

@@ -25,72 +25,82 @@ import java.util.Set;
 @Component
 public class InvoiceProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceProcessor.class );
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceProcessor.class);
+
+    private InvoiceService invoiceService;
+    private ConverterUtil converterUtil;
+    private IdUtil idUtil;
+    private PropertiesUtil propertiesUtil;
 
     @Autowired
-    private InvoiceService invoiceService;
-
-    public void store ( Map<String, Object> payload ) {
-        logger.info( "START | Create Invoice {}", payload );
-        Invoice invoice = ConverterUtil.mapToObject( payload, Invoice.class );
-        invoice.getInvoiceLines( ).stream( ).forEach( invoiceLine -> {
-            invoiceLine.setId( IdUtil.generateId( UUIDType.SHORT ) );
-            invoiceLine.setInvoice( invoice );
-        } );
-        invoiceService.save( invoice );
-        logger.info( "FINISH | Create Invoice {}", payload );
+    InvoiceProcessor(InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil) {
+        this.invoiceService = invoiceService;
+        this.converterUtil = converterUtil;
+        this.idUtil = idUtil;
+        this.propertiesUtil = propertiesUtil;
     }
 
-    @Transactional( propagation = Propagation.REQUIRED )
-    public void refresh ( Map<String, Object> payload ) {
-        logger.info( "START | Update Invoice {}", payload );
-        Invoice invoice = ConverterUtil.mapToObject( payload, Invoice.class );
-        Invoice invoiceFromDb = invoiceService.findById( invoice.getId( ) ).get( );
-        ConverterUtil.copyProperties( invoice, invoiceFromDb, this.propsToIgnore( invoiceFromDb, "invoiceLines" ) );
-        this.copyLinesToInvoice( invoice.getInvoiceLines( ), invoiceFromDb.getInvoiceLines( ) );
-        this.generateIdInvoiceLines( invoiceFromDb );
+    public void store(Map<String, Object> payload) {
+        logger.info("START | Create Invoice {}", payload);
+        Invoice invoice = this.converterUtil.mapToObject(payload, Invoice.class);
+        invoice.getInvoiceLines().stream().forEach(invoiceLine -> {
+            invoiceLine.setId(this.idUtil.generateId(UUIDType.SHORT));
+            invoiceLine.setInvoice(invoice);
+        });
+        this.invoiceService.save(invoice);
+        logger.info("FINISH | Create Invoice {}", payload);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void refresh(Map<String, Object> payload) {
+        logger.info("START | Update Invoice {}", payload);
+        Invoice invoice = this.converterUtil.mapToObject(payload, Invoice.class);
+        Invoice invoiceFromDb = invoiceService.findById(invoice.getId()).get();
+        this.converterUtil.copyProperties(invoice, invoiceFromDb, this.propsToIgnore(invoiceFromDb, "invoiceLines"));
+        this.copyLinesToInvoice(invoice.getInvoiceLines(), invoiceFromDb.getInvoiceLines());
+        this.generateIdInvoiceLines(invoiceFromDb);
         //invoiceService.save( invoiceFromDb );
-        logger.info( "FINISH | Update Invoice {}", payload );
+        logger.info("FINISH | Update Invoice {}", payload);
     }
 
-    public void delete ( Map<String, Object> payload ) {
-        logger.info( "START | Delete Product {}", payload );
-        String id = ( String ) payload.get( "id" );
-        invoiceService.delete( id );
-        logger.info( "FINISH | Delete Product {}", payload );
+    public void delete(Map<String, Object> payload) {
+        logger.info("START | Delete Product {}", payload);
+        String id = (String) payload.get("id");
+        invoiceService.delete(id);
+        logger.info("FINISH | Delete Product {}", payload);
     }
 
 
     // TODO Copy elements from Request to Target for both cases (Add or Remove a new line)
-    private void copyLinesToInvoice ( Set<InvoiceLine> invoiceLinesRequest, Set<InvoiceLine> invoiceLinesTarget ) {
-        for ( InvoiceLine invoiceLine : invoiceLinesRequest ) {
-            Optional<InvoiceLine> optionalInvoiceLine = invoiceLinesTarget.stream( ).filter( il -> il.getProductId( ).equalsIgnoreCase( invoiceLine.getProductId( ) ) ).findFirst( );
-            if ( optionalInvoiceLine.isPresent( ) ) {
-                InvoiceLine invoiceLineTarget = optionalInvoiceLine.get( );
-                ConverterUtil.copyProperties( invoiceLine, invoiceLineTarget, "invoice" );
+    private void copyLinesToInvoice(Set<InvoiceLine> invoiceLinesRequest, Set<InvoiceLine> invoiceLinesTarget) {
+        for (InvoiceLine invoiceLine : invoiceLinesRequest) {
+            Optional<InvoiceLine> optionalInvoiceLine = invoiceLinesTarget.stream().filter(il -> il.getProductId().equalsIgnoreCase(invoiceLine.getProductId())).findFirst();
+            if (optionalInvoiceLine.isPresent()) {
+                InvoiceLine invoiceLineTarget = optionalInvoiceLine.get();
+                this.converterUtil.copyProperties(invoiceLine, invoiceLineTarget, "invoice");
             } else {
-                invoiceLinesTarget.add( invoiceLine );
+                invoiceLinesTarget.add(invoiceLine);
             }
         }
     }
 
-    private void generateIdInvoiceLines ( Invoice invoice ) {
-        if ( CollectionUtils.isNotEmpty( invoice.getInvoiceLines( ) ) ) {
-            invoice.getInvoiceLines( ).forEach( invoiceLine -> {
-                if ( StringUtils.isBlank( invoiceLine.getId( ) ) ) {
-                    invoiceLine.setId( IdUtil.generateId( UUIDType.SHORT ) );
+    private void generateIdInvoiceLines(Invoice invoice) {
+        if (CollectionUtils.isNotEmpty(invoice.getInvoiceLines())) {
+            invoice.getInvoiceLines().forEach(invoiceLine -> {
+                if (StringUtils.isBlank(invoiceLine.getId())) {
+                    invoiceLine.setId(this.idUtil.generateId(UUIDType.SHORT));
                 }
-                invoiceLine.setInvoice( invoice );
-            } );
+                invoiceLine.setInvoice(invoice);
+            });
         }
     }
 
-    private String[] propsToIgnore ( Object source, String... props ) {
-        String[] propsToIgnore = PropertiesUtil.getNullProperties( source );
-        Set<String> properties = new HashSet<>( );
-        properties.add( "id" );
-        properties.addAll( Arrays.asList( props ) );
-        properties.addAll( Arrays.asList( propsToIgnore ) );
-        return properties.toArray( new String[ properties.size( ) ] );
+    private String[] propsToIgnore(Object source, String... props) {
+        String[] propsToIgnore = this.propertiesUtil.getNullProperties(source);
+        Set<String> properties = new HashSet<>();
+        properties.add("id");
+        properties.addAll(Arrays.asList(props));
+        properties.addAll(Arrays.asList(propsToIgnore));
+        return properties.toArray(new String[properties.size()]);
     }
 }

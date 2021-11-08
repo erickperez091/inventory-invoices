@@ -13,28 +13,33 @@ import java.util.Map;
 @Component
 public class InvoiceLineProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceLineProcessor.class );
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceLineProcessor.class);
+    private InvoiceLineService invoiceLineService;
+    private ConverterUtil converterUtil;
 
     @Autowired
-    private InvoiceLineService invoiceLineService;
-
-    public void storeOrRefresh ( Map<String, Object> payload ) {
-        logger.info( "START | Save or Update Invoice Line {}", payload );
+    InvoiceLineProcessor(InvoiceLineService invoiceLineService, ConverterUtil converterUtil) {
+        this.invoiceLineService = invoiceLineService;
+        this.converterUtil = converterUtil;
     }
 
-    public void refresh ( Map<String, Object> payload ) {
-        logger.info( "START | Update Invoice {}", payload );
-        Invoice invoice = ConverterUtil.mapToObject( payload, Invoice.class );
-        Invoice invoiceFromDb = new Invoice(  );//invoiceService.findById( invoice.getId( ) ).get( );
-        ConverterUtil.copyProperties( invoice, invoiceFromDb);
+    public void storeOrRefresh(Map<String, Object> payload) {
+        logger.info("START | Save or Update Invoice Line {}", payload);
+    }
+
+    public void refresh(Map<String, Object> payload) {
+        logger.info("START | Update Invoice {}", payload);
+        Invoice invoice = converterUtil.mapToObject(payload, Invoice.class);
+        Invoice invoiceFromDb = new Invoice();//invoiceService.findById( invoice.getId( ) ).get( );
+        converterUtil.copyProperties(invoice, invoiceFromDb);
         //invoiceLineService.save( invoiceFromDb );
-        logger.info( "FINISH | Update Invoice {}", payload );
+        logger.info("FINISH | Update Invoice {}", payload);
     }
 
-    public void delete ( Map<String, Object> payload ) {
-        logger.info( "START | Delete Product {}", payload );
-        String id = ( String ) payload.get( "id" );
+    public void delete(Map<String, Object> payload) {
+        logger.info("START | Delete Product {}", payload);
+        String id = (String) payload.get("id");
         //invoiceLineService.delete( id );
-        logger.info( "FINISH | Delete Product {}", payload );
+        logger.info("FINISH | Delete Product {}", payload);
     }
 }

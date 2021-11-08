@@ -14,33 +14,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class InvoiceConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceConsumer.class );
-
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceConsumer.class);
     private InvoiceProcessor invoiceProcessor;
-
-    @Autowired
     private InvoiceLineProcessor invoiceLineProcessor;
 
-    @KafkaListener( topics = { "${topic-name}" } )
-    public void handleInvoiceEvent ( @Payload final MessageEvent messageEvent ) {
-        logger.info( "Message received: {}", messageEvent.getEventName( ) );
-        EventType eventType = messageEvent.getEventName( );
-        switch ( eventType ) {
+    @Autowired
+    InvoiceConsumer(InvoiceProcessor invoiceProcessor, InvoiceLineProcessor invoiceLineProcessor) {
+        this.invoiceProcessor = invoiceProcessor;
+        this.invoiceLineProcessor = invoiceLineProcessor;
+    }
+
+    @KafkaListener(topics = {"${topic-name}"})
+    public void handleInvoiceEvent(@Payload final MessageEvent messageEvent) {
+        logger.info("Message received: {}", messageEvent.getEventName());
+        EventType eventType = messageEvent.getEventName();
+        switch (eventType) {
             case CREATE_INVOICE: {
-                invoiceProcessor.store( messageEvent.getPayload( ) );
+                invoiceProcessor.store(messageEvent.getPayload());
                 break;
             }
             case UPDATE_INVOICE: {
-                invoiceProcessor.refresh( messageEvent.getPayload( ) );
+                invoiceProcessor.refresh(messageEvent.getPayload());
                 break;
             }
             case DELETE_INVOICE: {
-                invoiceProcessor.delete( messageEvent.getPayload( ) );
+                invoiceProcessor.delete(messageEvent.getPayload());
                 break;
             }
             case ADD_MODIFY_INVOICE_LINE: {
-                invoiceLineProcessor.storeOrRefresh( messageEvent.getPayload() );
+                invoiceLineProcessor.storeOrRefresh(messageEvent.getPayload());
                 break;
             }
         }

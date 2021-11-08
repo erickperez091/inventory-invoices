@@ -23,49 +23,56 @@ import java.util.Optional;
 @Component
 public class InvoiceHandlerImpl implements InvoiceHandler {
 
-    @Autowired
     private InvoiceService invoiceService;
-
-    @Autowired
     private InvoiceProducer invoiceProducer;
+    private ConverterUtil converterUtil;
+    private IdUtil idUtil;
 
-    @Value( "${invoice.discount.percent:0.0}" )
+    @Value("${invoice.discount.percent:0.0}")
     private BigDecimal discountPercentage;
 
-    @Value( "${invoice.tax.percent:0.0}" )
+    @Value("${invoice.tax.percent:0.0}")
     private BigDecimal taxPercentage;
 
-    @Override
-    public ResponseEntity<Object> createInvoice ( Invoice invoice ) {
-        invoice.setId( IdUtil.generateId( UUIDType.SHORT ) );
-        invoice.calculateTotal( discountPercentage, taxPercentage );
-        Map<String, Object> invoicePayload = ConverterUtil.objectToMap( invoice );
-        MessageEvent messageEvent = new MessageEvent( EventType.CREATE_INVOICE, invoicePayload );
-        invoiceProducer.sendMessage( messageEvent );
-        return new ResponseEntity<>( invoice, HttpStatus.OK );
+    @Autowired
+    public InvoiceHandlerImpl(InvoiceService invoiceService, InvoiceProducer invoiceProducer, ConverterUtil converterUtil, IdUtil idUtil) {
+        this.invoiceService = invoiceService;
+        this.invoiceProducer = invoiceProducer;
+        this.converterUtil = converterUtil;
+        this.idUtil = idUtil;
     }
 
     @Override
-    public ResponseEntity<Object> updateInvoice ( Invoice invoice ) {
-        Optional<Invoice> optionalInvoiceFromDb = invoiceService.findById( invoice.getId( ) );
-        if( optionalInvoiceFromDb.isEmpty( ) ){
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, String.format( "Unable to find Invoice Lines for Invoice with ID %s Not Found", invoice.getId( ) ) );
-        }
-        invoice.calculateTotal( discountPercentage, taxPercentage );
-        Map<String, Object> payload = ConverterUtil.objectToMap( invoice );
-        MessageEvent messageEvent = new MessageEvent( EventType.UPDATE_INVOICE, payload );
-        invoiceProducer.sendMessage( messageEvent );
-        return new ResponseEntity<>( invoice, HttpStatus.OK );
+    public ResponseEntity<Object> createInvoice(Invoice invoice) {
+        invoice.setId(idUtil.generateId(UUIDType.SHORT));
+        invoice.calculateTotal(discountPercentage, taxPercentage);
+        Map<String, Object> invoicePayload = converterUtil.objectToMap(invoice);
+        MessageEvent messageEvent = new MessageEvent(EventType.CREATE_INVOICE, invoicePayload);
+        invoiceProducer.sendMessage(messageEvent);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Object> getInvoiceById ( String id ) {
-        Optional<Invoice> invoiceOptional = invoiceService.findById( id );
-        if ( invoiceOptional.isEmpty( ) ) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, String.format( "Unable to find Invoice, Invoice with ID %s Not Found", id ) );
+    public ResponseEntity<Object> updateInvoice(Invoice invoice) {
+        Optional<Invoice> optionalInvoiceFromDb = invoiceService.findById(invoice.getId());
+        if (optionalInvoiceFromDb.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Unable to find Invoice Lines for Invoice with ID %s Not Found", invoice.getId()));
         }
-        Invoice invoice = invoiceOptional.get( );
-        return new ResponseEntity<>( invoice, HttpStatus.FOUND );
+        invoice.calculateTotal(discountPercentage, taxPercentage);
+        Map<String, Object> payload = converterUtil.objectToMap(invoice);
+        MessageEvent messageEvent = new MessageEvent(EventType.UPDATE_INVOICE, payload);
+        invoiceProducer.sendMessage(messageEvent);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Object> getInvoiceById(String id) {
+        Optional<Invoice> invoiceOptional = invoiceService.findById(id);
+        if (invoiceOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Unable to find Invoice, Invoice with ID %s Not Found", id));
+        }
+        Invoice invoice = invoiceOptional.get();
+        return new ResponseEntity<>(invoice, HttpStatus.FOUND);
     }
 
 
