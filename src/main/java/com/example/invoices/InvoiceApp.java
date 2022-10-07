@@ -9,7 +9,6 @@ import org.springframework.kafka.annotation.EnableKafka;
 
 /**
  * Hello world!
- *
  */
 
 @SpringBootApplication
@@ -17,10 +16,8 @@ import org.springframework.kafka.annotation.EnableKafka;
 @EnableJpaRepositories( basePackages = { "com.example.invoices.repository" } )
 @EnableKafka
 @EnableEurekaClient
-public class InvoiceApp
-{
-    public static void main( String[] args )
-    {
+public class InvoiceApp {
+    public static void main( String[] args ) {
         SpringApplication.run( InvoiceApp.class, args );
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface InvoiceLineHandler {
 
-    ResponseEntity<Object> getInvoiceLinesByInvoice ( String invoice_id );
+    ResponseEntity< Object > getInvoiceLinesByInvoice( String invoice_id );
 
-    ResponseEntity<Object> addInvoiceLineByInvoiceAndProductId( InvoiceLine invoiceLine, String invoiceId );
+    ResponseEntity< Object > addInvoiceLineByInvoiceAndProductId( InvoiceLine invoiceLine, String invoiceId );
 }

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InvoiceLineRepository extends JpaRepository<InvoiceLine, String> {
+public interface InvoiceLineRepository extends JpaRepository< InvoiceLine, String > {
 
-    Optional<List<InvoiceLine>> findAllByInvoice ( Invoice invoice );
+    Optional< List< InvoiceLine > > findAllByInvoice( Invoice invoice );
 
-    Optional<InvoiceLine> findByInvoiceAndProductId( @Param("invoice") Invoice invoice, @Param ( "product_id" ) String product_id);
+    Optional< InvoiceLine > findByInvoiceAndProductId( @Param( "invoice" ) Invoice invoice, @Param( "product_id" ) String product_id );
 }

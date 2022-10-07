@@ -15,22 +15,22 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     @Bean
-    public Docket usersApi ( ) {
+    public Docket usersApi() {
         return new Docket( DocumentationType.SWAGGER_2 )
-                .apiInfo( usersApiInfo( ) )
-                .select( )
+                .apiInfo( usersApiInfo() )
+                .select()
                 .paths( PathSelectors.regex( "/(invoice)/v1.*" ) )
-                .apis( RequestHandlerSelectors.any( ) )
-                .build( )
+                .apis( RequestHandlerSelectors.any() )
+                .build()
                 .useDefaultResponseMessages( false );
     }
 
-    private ApiInfo usersApiInfo ( ) {
-        return new ApiInfoBuilder( )
+    private ApiInfo usersApiInfo() {
+        return new ApiInfoBuilder()
                 .title( "Inventory Microservice System" )
                 .version( "1.0" )
                 .license( "Apache License Version 2.0" )
-                .build( );
+                .build();
     }
 
 }

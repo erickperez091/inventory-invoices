@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Table(name = "invoice_line")
+@Table( name = "invoice_line" )
 @Entity
 //@JsonIdentityInfo(
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -20,31 +20,31 @@ import java.util.Objects;
 public class InvoiceLine implements Serializable {
 
     @Id
-    @Column(name = "id", unique = true, nullable = false)
+    @Column( name = "id", unique = true, nullable = false )
     private String id;
 
-    @Column(name = "product_id", nullable = false)
+    @Column( name = "product_id", nullable = false )
     private String productId;
 
-    @Column(name = "product_description", nullable = false)
+    @Column( name = "product_description", nullable = false )
     private String productDescription;
 
-    @Column(name = "units", nullable = false)
+    @Column( name = "units", nullable = false )
     private int units;
 
-    @Column(name = "product_price", nullable = false)
+    @Column( name = "product_price", nullable = false )
     private BigDecimal productPrice;
 
-    @Column(name = "total_line", nullable = false)
+    @Column( name = "total_line", nullable = false )
     private BigDecimal totalInvoiceLine;
 
     @ManyToOne
-    @JoinColumn(name = "invoice_id", nullable = false, updatable = false)
+    @JoinColumn( name = "invoice_id", nullable = false, updatable = false )
     //@JsonBackReference
-    @JsonIgnoreProperties({"invoiceLines"})
+    @JsonIgnoreProperties( { "invoiceLines" } )
     private Invoice invoice;
 
-    public InvoiceLine ( String id, String productId, String productDescription, int units, BigDecimal productPrice, BigDecimal totalInvoiceLine, Invoice invoice ) {
+    public InvoiceLine( String id, String productId, String productDescription, int units, BigDecimal productPrice, BigDecimal totalInvoiceLine, Invoice invoice ) {
         this.id = id;
         this.productId = productId;
         this.productDescription = productDescription;
@@ -54,70 +54,70 @@ public class InvoiceLine implements Serializable {
         this.invoice = invoice;
     }
 
-    public InvoiceLine ( ) {
+    public InvoiceLine() {
     }
 
-    public String getId ( ) {
+    public String getId() {
         return id;
     }
 
-    public void setId ( String id ) {
+    public void setId( String id ) {
         this.id = id;
     }
 
-    public String getProductId ( ) {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId ( String productId ) {
+    public void setProductId( String productId ) {
         this.productId = productId;
     }
 
-    public String getProductDescription ( ) {
+    public String getProductDescription() {
         return productDescription;
     }
 
-    public void setProductDescription ( String productDescription ) {
+    public void setProductDescription( String productDescription ) {
         this.productDescription = productDescription;
     }
 
-    public int getUnits ( ) {
+    public int getUnits() {
         return units;
     }
 
-    public void setUnits ( int units ) {
+    public void setUnits( int units ) {
         this.units = units;
     }
 
-    public BigDecimal getProductPrice ( ) {
+    public BigDecimal getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice ( BigDecimal productPrice ) {
+    public void setProductPrice( BigDecimal productPrice ) {
         this.productPrice = productPrice;
     }
 
-    public BigDecimal getTotalInvoiceLine ( ) {
+    public BigDecimal getTotalInvoiceLine() {
         return totalInvoiceLine;
     }
 
-    public void setTotalInvoiceLine ( BigDecimal totalInvoiceLine ) {
+    public void setTotalInvoiceLine( BigDecimal totalInvoiceLine ) {
         this.totalInvoiceLine = totalInvoiceLine;
     }
 
-    public Invoice getInvoice ( ) {
+    public Invoice getInvoice() {
         return invoice;
     }
 
-    public void setInvoice ( Invoice invoice ) {
+    public void setInvoice( Invoice invoice ) {
         this.invoice = invoice;
     }
 
     @Override
-    public boolean equals ( Object o ) {
+    public boolean equals( Object o ) {
         if ( this == o ) return true;
-        if ( o == null || getClass( ) != o.getClass( ) ) return false;
-        InvoiceLine that = ( InvoiceLine ) o;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        InvoiceLine that = (InvoiceLine) o;
         return units == that.units &&
                 Objects.equals( id, that.id ) &&
                 Objects.equals( productId, that.productId ) &&
@@ -127,12 +127,12 @@ public class InvoiceLine implements Serializable {
     }
 
     @Override
-    public int hashCode ( ) {
+    public int hashCode() {
         return Objects.hash( id, productId, productDescription, units, productPrice, totalInvoiceLine );
     }
 
     @Override
-    public String toString ( ) {
+    public String toString() {
         return "InvoiceLine{" +
                 "id='" + id + '\'' +
                 ", productId='" + productId + '\'' +

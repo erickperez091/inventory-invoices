@@ -14,30 +14,30 @@ import java.util.Optional;
 @Service
 public class InvoiceService {
 
-    private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
+    private static final Logger logger = LoggerFactory.getLogger( InvoiceService.class );
 
     private InvoiceRepository repository;
 
     @Autowired
-    public InvoiceService(InvoiceRepository repository) {
+    public InvoiceService( InvoiceRepository repository ) {
         this.repository = repository;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void save(Invoice invoice) {
-        logger.info("START | Save Invoice {}", invoice.getId());
-        repository.save(invoice);
-        logger.info("FINISH | Save Invoice {}", invoice.getId());
+    @Transactional( propagation = Propagation.REQUIRED )
+    public void save( Invoice invoice ) {
+        logger.info( "START | Save Invoice {}", invoice.getId() );
+        repository.save( invoice );
+        logger.info( "FINISH | Save Invoice {}", invoice.getId() );
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public Optional<Invoice> findById(String id) {
-        return repository.findById(id);
+    @Transactional( propagation = Propagation.REQUIRED, readOnly = true )
+    public Optional< Invoice > findById( String id ) {
+        return repository.findById( id );
     }
 
-    public void delete(String id) {
-        logger.info("START | Delete Invoice {}", id);
-        repository.deleteById(id);
-        logger.info("FINISH | Delete Invoice {}", id);
+    public void delete( String id ) {
+        logger.info( "START | Delete Invoice {}", id );
+        repository.deleteById( id );
+        logger.info( "FINISH | Delete Invoice {}", id );
     }
 }

@@ -65,10 +65,10 @@ public class Invoice implements Serializable {
     @OneToMany( mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     //@JsonManagedReference
     @JsonIgnoreProperties( { "invoice" } )
-    private Set<InvoiceLine> invoiceLines;
+    private Set< InvoiceLine > invoiceLines;
 
 
-    public Invoice ( String id, LocalDateTime invoiceDate, BigDecimal invoiceTax, BigDecimal invoiceDiscount, BigDecimal invoiceTotal, BigDecimal invoiceSubTotal, InvoiceStatus invoiceStatus, Set<InvoiceLine> invoiceLines ) {
+    public Invoice( String id, LocalDateTime invoiceDate, BigDecimal invoiceTax, BigDecimal invoiceDiscount, BigDecimal invoiceTotal, BigDecimal invoiceSubTotal, InvoiceStatus invoiceStatus, Set< InvoiceLine > invoiceLines ) {
         this.id = id;
         this.invoiceDate = invoiceDate;
         this.invoiceTax = invoiceTax;
@@ -79,94 +79,94 @@ public class Invoice implements Serializable {
         this.invoiceLines = invoiceLines;
     }
 
-    public Invoice ( ) {
+    public Invoice() {
     }
 
-    public String getId ( ) {
+    public String getId() {
         return id;
     }
 
-    public void setId ( String id ) {
+    public void setId( String id ) {
         this.id = id;
     }
 
-    public LocalDateTime getInvoiceDate ( ) {
+    public LocalDateTime getInvoiceDate() {
         return invoiceDate;
     }
 
-    public void setInvoiceDate ( LocalDateTime invoiceDate ) {
+    public void setInvoiceDate( LocalDateTime invoiceDate ) {
         this.invoiceDate = invoiceDate;
     }
 
-    public BigDecimal getInvoiceTax ( ) {
+    public BigDecimal getInvoiceTax() {
         return invoiceTax;
     }
 
-    public void setInvoiceTax ( BigDecimal invoiceTax ) {
+    public void setInvoiceTax( BigDecimal invoiceTax ) {
         this.invoiceTax = invoiceTax;
     }
 
-    public BigDecimal getInvoiceDiscount ( ) {
+    public BigDecimal getInvoiceDiscount() {
         return invoiceDiscount;
     }
 
-    public void setInvoiceDiscount ( BigDecimal invoiceDiscount ) {
+    public void setInvoiceDiscount( BigDecimal invoiceDiscount ) {
         this.invoiceDiscount = invoiceDiscount;
     }
 
-    public BigDecimal getInvoiceTotal ( ) {
+    public BigDecimal getInvoiceTotal() {
         return invoiceTotal;
     }
 
-    public void setInvoiceTotal ( BigDecimal invoiceTotal ) {
+    public void setInvoiceTotal( BigDecimal invoiceTotal ) {
         this.invoiceTotal = invoiceTotal;
     }
 
-    public BigDecimal getInvoiceSubTotal ( ) {
+    public BigDecimal getInvoiceSubTotal() {
         return invoiceSubTotal;
     }
 
-    public void setInvoiceSubTotal ( BigDecimal invoiceSubTotal ) {
+    public void setInvoiceSubTotal( BigDecimal invoiceSubTotal ) {
         this.invoiceSubTotal = invoiceSubTotal;
     }
 
-    public InvoiceStatus getInvoiceStatus ( ) {
+    public InvoiceStatus getInvoiceStatus() {
         return invoiceStatus;
     }
 
-    public void setInvoiceStatus ( InvoiceStatus invoiceStatus ) {
+    public void setInvoiceStatus( InvoiceStatus invoiceStatus ) {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public Set<InvoiceLine> getInvoiceLines ( ) {
+    public Set< InvoiceLine > getInvoiceLines() {
         return invoiceLines;
     }
 
-    public void setInvoiceLines ( Set<InvoiceLine> invoiceLines ) {
+    public void setInvoiceLines( Set< InvoiceLine > invoiceLines ) {
         this.invoiceLines = invoiceLines;
     }
 
-    private void calculateInvoiceSubtotal ( ) {
+    private void calculateInvoiceSubtotal() {
         this.invoiceSubTotal = BigDecimal.ZERO;
         if ( CollectionUtils.isNotEmpty( invoiceLines ) ) {
-            this.invoiceSubTotal = invoiceLines.stream( ).map( InvoiceLine::getTotalInvoiceLine ).reduce( BigDecimal.ZERO, BigDecimal::add );
+            this.invoiceSubTotal = invoiceLines.stream().map( InvoiceLine::getTotalInvoiceLine ).reduce( BigDecimal.ZERO, BigDecimal::add );
             this.invoiceSubTotal = this.invoiceSubTotal.setScale( 2, RoundingMode.HALF_EVEN );
         }
     }
 
-    private void calculateDiscountTotal ( BigDecimal discountPercentage ) {
+    private void calculateDiscountTotal( BigDecimal discountPercentage ) {
         this.invoiceDiscount = this.invoiceSubTotal.multiply( discountPercentage.divide( new BigDecimal( 100 ) ) );
         this.invoiceDiscount = this.invoiceDiscount.setScale( 2, RoundingMode.HALF_EVEN );
     }
 
-    private void calculateTaxTotal ( BigDecimal taxPercentage ) {
+    private void calculateTaxTotal( BigDecimal taxPercentage ) {
         BigDecimal subTotalAux = invoiceSubTotal.subtract( invoiceDiscount );
         this.invoiceTax = subTotalAux.multiply( taxPercentage.divide( new BigDecimal( 100 ) ) );
         this.invoiceTax = this.invoiceTax.setScale( 2, RoundingMode.HALF_EVEN );
     }
 
-    public void calculateTotal ( BigDecimal discountPercentage, BigDecimal taxesPercentage ) {
-        this.calculateInvoiceSubtotal( );
+    public void calculateTotal( BigDecimal discountPercentage, BigDecimal taxesPercentage ) {
+        this.calculateInvoiceSubtotal();
         this.calculateDiscountTotal( discountPercentage );
         this.calculateTaxTotal( taxesPercentage );
         this.invoiceTotal = this.invoiceSubTotal.subtract( this.invoiceDiscount ).add( this.invoiceTax );
@@ -174,22 +174,22 @@ public class Invoice implements Serializable {
     }
 
     @Override
-    public boolean equals ( Object o ) {
+    public boolean equals( Object o ) {
         if ( this == o ) return true;
-        if ( o == null || getClass( ) != o.getClass( ) ) return false;
-        Invoice invoice = ( Invoice ) o;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        Invoice invoice = (Invoice) o;
         return Objects.equals( id, invoice.id ) &&
                 Objects.equals( invoiceDate, invoice.invoiceDate ) &&
                 invoiceStatus == invoice.invoiceStatus;
     }
 
     @Override
-    public int hashCode ( ) {
+    public int hashCode() {
         return Objects.hash( id, invoiceDate, invoiceTax, invoiceDiscount, invoiceTotal, invoiceSubTotal, invoiceStatus );
     }
 
     @Override
-    public String toString ( ) {
+    public String toString() {
         return "Invoice{" +
                 "id='" + id + '\'' +
                 ", invoiceDate=" + invoiceDate +

@@ -14,24 +14,24 @@ import java.util.Optional;
 @Service
 public class InvoiceLineService {
 
-    private static final Logger logger = LoggerFactory.getLogger(InvoiceLineService.class);
+    private static final Logger logger = LoggerFactory.getLogger( InvoiceLineService.class );
 
     private InvoiceLineRepository repository;
 
     @Autowired
-    public InvoiceLineService(InvoiceLineRepository repository) {
+    public InvoiceLineService( InvoiceLineRepository repository ) {
         this.repository = repository;
     }
 
-    public void save(InvoiceLine invoiceLine) {
-        repository.save(invoiceLine);
+    public void save( InvoiceLine invoiceLine ) {
+        repository.save( invoiceLine );
     }
 
-    public Optional<List<InvoiceLine>> findInvoiceLinesByInvoice(Invoice invoice) {
-        return repository.findAllByInvoice(invoice);
+    public Optional< List< InvoiceLine > > findInvoiceLinesByInvoice( Invoice invoice ) {
+        return repository.findAllByInvoice( invoice );
     }
 
-    public Optional<InvoiceLine> findInvoiceLineByInvoiceAndProductId(Invoice invoice, String productId) {
-        return repository.findByInvoiceAndProductId(invoice, productId);
+    public Optional< InvoiceLine > findInvoiceLineByInvoiceAndProductId( Invoice invoice, String productId ) {
+        return repository.findByInvoiceAndProductId( invoice, productId );
     }
 }

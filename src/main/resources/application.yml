@@ -1,58 +1,58 @@
 server:
-    port: 9081
+  port: 9081
 
 spring:
-    application:
-        name: invoice-service
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        password: s3cr3t_passw0rd
-        url: jdbc:mysql://localhost:3306/invoice?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-        username: root
-    jpa:
-        hibernate:
-            ddl-auto: update
-        properties:
-            hibernate:
-                format_sql: true
-        show-sql: true
+  application:
+    name: invoice-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: s3cr3t_passw0rd
+    url: jdbc:mysql://localhost:3306/invoice?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
 
 eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8761/eureka
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
 kafka:
-    bootstrapAddress: localhost:9092
-    consumer:
-        client-id: invoices
-    max:
-        poll:
-            records: 1
+  bootstrapAddress: localhost:9092
+  consumer:
+    client-id: invoices
+  max:
+    poll:
+      records: 1
 
 topic-name: invoices
 
 logging:
-    level:
-        org:
-            hibernate:
-                SQL: info
-                type:
-                    descriptor:
-                        sql:
-                            BasicBinder: info
+  level:
+    org:
+      hibernate:
+        SQL: info
+        type:
+          descriptor:
+            sql:
+              BasicBinder: info
 invoice:
-    discount:
-        percent: 10
-    tax:
-        percent: 13
+  discount:
+    percent: 10
+  tax:
+    percent: 13
 
 microservice:
-    host: localhost
-    protocol: http://
+  host: localhost
+  protocol: http://
 product:
-    microservice:
-        base-url: products/v1
-        port: 8081
+  microservice:
+    base-url: products/v1
+    port: 8081
 
 

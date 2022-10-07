@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 public interface InvoiceHandler {
 
-    ResponseEntity<Object> createInvoice ( Invoice invoice );
+    ResponseEntity< Object > createInvoice( Invoice invoice );
 
-    ResponseEntity<Object> updateInvoice ( Invoice invoice );
+    ResponseEntity< Object > updateInvoice( Invoice invoice );
 
-    ResponseEntity<Object> getInvoiceById ( String id );
+    ResponseEntity< Object > getInvoiceById( String id );
 }

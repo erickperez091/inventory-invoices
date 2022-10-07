@@ -41,7 +41,7 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
     private BigDecimal taxPercentage;
 
     @Autowired
-    public InvoiceLineHandlerImpl(InvoiceLineService invoiceLineService, InvoiceProducer invoiceProducer, InvoiceService invoiceService, ConverterUtil converterUtil) {
+    public InvoiceLineHandlerImpl( InvoiceLineService invoiceLineService, InvoiceProducer invoiceProducer, InvoiceService invoiceService, ConverterUtil converterUtil ) {
         this.invoiceLineService = invoiceLineService;
         this.invoiceProducer = invoiceProducer;
         this.invoiceService = invoiceService;
@@ -49,36 +49,36 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
     }
 
     @Override
-    public ResponseEntity<Object> getInvoiceLinesByInvoice ( String invoice_id ) {
-        Invoice invoice = new Invoice( );
+    public ResponseEntity< Object > getInvoiceLinesByInvoice( String invoice_id ) {
+        Invoice invoice = new Invoice();
         invoice.setId( invoice_id );
-        Optional<List<InvoiceLine>> optionalInvoiceLineList = invoiceLineService.findInvoiceLinesByInvoice( invoice );
-        if ( optionalInvoiceLineList.isEmpty( ) ) {
-            throw new ResponseStatusException( HttpStatus.NOT_FOUND, String.format( "Unable to find Invoice Lines for Invoice with ID %s Not Found", invoice.getId( ) ) );
+        Optional< List< InvoiceLine > > optionalInvoiceLineList = invoiceLineService.findInvoiceLinesByInvoice( invoice );
+        if ( optionalInvoiceLineList.isEmpty() ) {
+            throw new ResponseStatusException( HttpStatus.NOT_FOUND, String.format( "Unable to find Invoice Lines for Invoice with ID %s Not Found", invoice.getId() ) );
         }
-        List<InvoiceLine> invoiceLines = optionalInvoiceLineList.get( );
+        List< InvoiceLine > invoiceLines = optionalInvoiceLineList.get();
         return new ResponseEntity<>( invoiceLines, HttpStatus.FOUND );
     }
 
     @Override
-    public ResponseEntity<Object> addInvoiceLineByInvoiceAndProductId ( InvoiceLine invoiceLine, String invoiceId ) {
-        Optional<Invoice> optionalInvoiceFromDb = invoiceService.findById( invoiceId );
+    public ResponseEntity< Object > addInvoiceLineByInvoiceAndProductId( InvoiceLine invoiceLine, String invoiceId ) {
+        Optional< Invoice > optionalInvoiceFromDb = invoiceService.findById( invoiceId );
         Invoice invoiceFromDb = null;
-        if ( optionalInvoiceFromDb.isPresent( ) ) {
-            invoiceFromDb = optionalInvoiceFromDb.get( );
-            if ( CollectionUtils.isNotEmpty( invoiceFromDb.getInvoiceLines( ) ) ) {
-                Optional<InvoiceLine> optionalInvoiceLine = invoiceFromDb.getInvoiceLines( ).stream( ).filter( il -> il.getProductId( ).equals( invoiceLine.getProductId( ) ) ).findFirst( );
-                if ( optionalInvoiceLine.isPresent( ) ) {
-                    InvoiceLine invoiceLineFromDb = optionalInvoiceLine.get( );
+        if ( optionalInvoiceFromDb.isPresent() ) {
+            invoiceFromDb = optionalInvoiceFromDb.get();
+            if ( CollectionUtils.isNotEmpty( invoiceFromDb.getInvoiceLines() ) ) {
+                Optional< InvoiceLine > optionalInvoiceLine = invoiceFromDb.getInvoiceLines().stream().filter( il -> il.getProductId().equals( invoiceLine.getProductId() ) ).findFirst();
+                if ( optionalInvoiceLine.isPresent() ) {
+                    InvoiceLine invoiceLineFromDb = optionalInvoiceLine.get();
                     this.converterUtil.copyProperties( invoiceLine, invoiceLineFromDb );
                 } else {
-                    invoiceFromDb.getInvoiceLines( ).add( invoiceLine );
+                    invoiceFromDb.getInvoiceLines().add( invoiceLine );
                 }
             }
         }
         assert invoiceFromDb != null;
         invoiceFromDb.calculateTotal( discountPercentage, taxPercentage );
-        Map<String, Object> payload = this.converterUtil.objectToMap( invoiceFromDb );
+        Map< String, Object > payload = this.converterUtil.objectToMap( invoiceFromDb );
         MessageEvent messageEvent = new MessageEvent( EventType.UPDATE_INVOICE, payload );
         invoiceProducer.sendMessage( messageEvent );
         return new ResponseEntity<>( invoiceFromDb, HttpStatus.FOUND );

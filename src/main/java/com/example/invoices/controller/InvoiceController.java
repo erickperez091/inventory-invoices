@@ -15,35 +15,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/invoice/v1")
+@RequestMapping( "/invoice/v1" )
 public class InvoiceController {
 
     private InvoiceHandler invoiceHandler;
 
     @Autowired
-    public InvoiceController(InvoiceHandler invoiceHandler) {
+    public InvoiceController( InvoiceHandler invoiceHandler ) {
         this.invoiceHandler = invoiceHandler;
     }
 
     @GetMapping( value = "ping" )
-    public ResponseEntity<String> ping ( ) {
+    public ResponseEntity< String > ping() {
         return new ResponseEntity<>( "Microservice is up and running", HttpStatus.OK );
     }
 
     @PostMapping( name = "create", value = "/", path = "/", consumes = { MediaType.APPLICATION_JSON_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE } )
-    public ResponseEntity<Object> create( @RequestBody Invoice invoice ){
+    public ResponseEntity< Object > create( @RequestBody Invoice invoice ) {
         return invoiceHandler.createInvoice( invoice );
     }
 
     @PutMapping( name = "update", value = "/", path = "/", consumes = { MediaType.APPLICATION_JSON_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE } )
-    public ResponseEntity<Object> update( @RequestBody Invoice invoice ){
+    public ResponseEntity< Object > update( @RequestBody Invoice invoice ) {
         return invoiceHandler.updateInvoice( invoice );
     }
 
-    @GetMapping( name = "get invoice by id", value = "/{id}", path = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Object> get( @PathVariable( name = "id" ) String id){
+    @GetMapping( name = "get invoice by id", value = "/{id}", path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } )
+    public ResponseEntity< Object > get( @PathVariable( name = "id" ) String id ) {
         return invoiceHandler.getInvoiceById( id );
     }
 }

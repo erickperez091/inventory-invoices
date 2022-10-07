@@ -19,17 +19,17 @@ public class InvoiceLineController {
     private InvoiceLineHandler invoiceLineHandler;
 
     @Autowired
-    public InvoiceLineController(InvoiceLineHandler invoiceLineHandler) {
+    public InvoiceLineController( InvoiceLineHandler invoiceLineHandler ) {
         this.invoiceLineHandler = invoiceLineHandler;
     }
 
     @GetMapping( name = "get invoice lines by invoice", path = "/{invoice_id}/lines", value = "/{invoice_id}/lines", produces = { MediaType.APPLICATION_JSON_VALUE } )
-    public ResponseEntity<Object> getInvoiceLinesByInvoice ( @PathVariable( name = "invoice_id" ) String invoice_id ) {
+    public ResponseEntity< Object > getInvoiceLinesByInvoice( @PathVariable( name = "invoice_id" ) String invoice_id ) {
         return invoiceLineHandler.getInvoiceLinesByInvoice( invoice_id );
     }
 
     @PatchMapping( value = "/{invoice_id}/line" )
-    public ResponseEntity<Object> addInvoiceLineByInvoice ( @PathVariable( name = "invoice_id" ) String invoice_id, @RequestBody InvoiceLine invoiceLine ) {
+    public ResponseEntity< Object > addInvoiceLineByInvoice( @PathVariable( name = "invoice_id" ) String invoice_id, @RequestBody InvoiceLine invoiceLine ) {
         return invoiceLineHandler.addInvoiceLineByInvoiceAndProductId( invoiceLine, invoice_id );
     }
 
