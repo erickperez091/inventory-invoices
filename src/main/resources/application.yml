@@ -47,12 +47,13 @@ invoice:
   tax:
     percent: 13
 
-microservice:
-  host: localhost
-  protocol: http://
 product:
-  microservice:
-    base-url: products/v1
-    port: 8081
+  service:
+    name: inventory-service
+    base-url: product/v1
+
+service:
+  general:
+    protocol: http://
 
 

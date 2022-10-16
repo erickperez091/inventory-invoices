@@ -11,6 +11,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import java.net.URISyntaxException;
+
 @Component
 public class InvoiceConsumer {
 
@@ -25,7 +27,7 @@ public class InvoiceConsumer {
     }
 
     @KafkaListener( topics = { "${topic-name}" } )
-    public void handleInvoiceEvent( @Payload final MessageEvent messageEvent ) {
+    public void handleInvoiceEvent( @Payload final MessageEvent messageEvent ) throws URISyntaxException {
         logger.info( "Message received: {}", messageEvent.getEventName() );
         EventType eventType = messageEvent.getEventName();
         switch ( eventType ) {

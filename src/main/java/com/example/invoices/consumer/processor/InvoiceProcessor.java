@@ -7,6 +7,7 @@ import com.example.common.utilities.PropertiesUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.service.InvoiceService;
+import com.example.invoices.service.clients.ProductServiceClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,23 +33,26 @@ public class InvoiceProcessor {
     private ConverterUtil converterUtil;
     private IdUtil idUtil;
     private PropertiesUtil propertiesUtil;
+    private ProductServiceClient productServiceClient;
 
     @Autowired
-    InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil ) {
+    InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil, ProductServiceClient productServiceClient ) {
         this.invoiceService = invoiceService;
         this.converterUtil = converterUtil;
         this.idUtil = idUtil;
         this.propertiesUtil = propertiesUtil;
+        this.productServiceClient = productServiceClient;
     }
 
-    public void store( Map< String, Object > payload ) {
+    public void store( Map< String, Object > payload ) throws URISyntaxException {
         logger.info( "START | Create Invoice {}", payload );
         Invoice invoice = this.converterUtil.mapToObject( payload, Invoice.class );
         invoice.getInvoiceLines().stream().forEach( invoiceLine -> {
             invoiceLine.setId( this.idUtil.generateId( UUIDType.SHORT ) );
             invoiceLine.setInvoice( invoice );
         } );
-        this.invoiceService.save( invoice );
+        this.productServiceClient.updateProductsInventory( invoice.getInvoiceLines() );
+//        this.invoiceService.save( invoice );
         logger.info( "FINISH | Create Invoice {}", payload );
     }
 
