@@ -29,10 +29,10 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceLineHandlerImpl.class );
 
-    private InvoiceLineService invoiceLineService;
-    private InvoiceProducer invoiceProducer;
-    private InvoiceService invoiceService;
-    private ConverterUtil converterUtil;
+    private final InvoiceLineService invoiceLineService;
+    private final InvoiceProducer invoiceProducer;
+    private final InvoiceService invoiceService;
+    private final ConverterUtil converterUtil;
 
     @Value( "${invoice.discount.percent:0.0}" )
     private BigDecimal discountPercentage;

@@ -15,8 +15,9 @@ public class WebClientFilter{
         sb.append(request.method().name());
         sb.append(" to ");
         sb.append(request.url());
-
-        logger.debug(sb.toString());
+        /*sb.append( " | Payload: " );
+        sb.append( BodyInserters.fromValue( request.body() ) );*/
+        logger.info(sb.toString());
     }
 
     public static ExchangeFilterFunction logRequest() {

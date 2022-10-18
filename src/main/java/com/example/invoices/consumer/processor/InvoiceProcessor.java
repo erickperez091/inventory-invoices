@@ -29,11 +29,11 @@ public class InvoiceProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceProcessor.class );
 
-    private InvoiceService invoiceService;
-    private ConverterUtil converterUtil;
-    private IdUtil idUtil;
-    private PropertiesUtil propertiesUtil;
-    private ProductServiceClient productServiceClient;
+    private final InvoiceService invoiceService;
+    private final ConverterUtil converterUtil;
+    private final IdUtil idUtil;
+    private final PropertiesUtil propertiesUtil;
+    private final ProductServiceClient productServiceClient;
 
     @Autowired
     InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil, ProductServiceClient productServiceClient ) {
@@ -51,8 +51,8 @@ public class InvoiceProcessor {
             invoiceLine.setId( this.idUtil.generateId( UUIDType.SHORT ) );
             invoiceLine.setInvoice( invoice );
         } );
-        this.productServiceClient.updateProductsInventory( invoice.getInvoiceLines() );
-//        this.invoiceService.save( invoice );
+        this.productServiceClient.updateProductsInventory( invoice );
+        this.invoiceService.save( invoice );
         logger.info( "FINISH | Create Invoice {}", payload );
     }
 

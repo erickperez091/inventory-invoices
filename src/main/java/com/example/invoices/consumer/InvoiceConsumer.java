@@ -17,8 +17,8 @@ import java.net.URISyntaxException;
 public class InvoiceConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceConsumer.class );
-    private InvoiceProcessor invoiceProcessor;
-    private InvoiceLineProcessor invoiceLineProcessor;
+    private final InvoiceProcessor invoiceProcessor;
+    private final InvoiceLineProcessor invoiceLineProcessor;
 
     @Autowired
     InvoiceConsumer( InvoiceProcessor invoiceProcessor, InvoiceLineProcessor invoiceLineProcessor ) {

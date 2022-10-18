@@ -16,7 +16,7 @@ public class InvoiceService {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceService.class );
 
-    private InvoiceRepository repository;
+    private final InvoiceRepository repository;
 
     @Autowired
     public InvoiceService( InvoiceRepository repository ) {

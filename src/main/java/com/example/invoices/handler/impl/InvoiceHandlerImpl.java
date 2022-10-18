@@ -23,10 +23,10 @@ import java.util.Optional;
 @Component
 public class InvoiceHandlerImpl implements InvoiceHandler {
 
-    private InvoiceService invoiceService;
-    private InvoiceProducer invoiceProducer;
-    private ConverterUtil converterUtil;
-    private IdUtil idUtil;
+    private final InvoiceService invoiceService;
+    private final InvoiceProducer invoiceProducer;
+    private final ConverterUtil converterUtil;
+    private final IdUtil idUtil;
 
     @Value( "${invoice.discount.percent:0.0}" )
     private BigDecimal discountPercentage;

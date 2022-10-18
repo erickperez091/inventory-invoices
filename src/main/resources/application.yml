@@ -51,6 +51,7 @@ product:
   service:
     name: inventory-service
     base-url: product/v1
+    update-inventory-url: /products-stock
 
 service:
   general:

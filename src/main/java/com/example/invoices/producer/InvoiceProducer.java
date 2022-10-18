@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class InvoiceProducer {
 
-    private KafkaSenderService senderService;
+    private final KafkaSenderService senderService;
 
     @Autowired
     public InvoiceProducer( KafkaSenderService senderService ) {
