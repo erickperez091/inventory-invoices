@@ -61,8 +61,7 @@ public class ProductServiceClientImpl implements ProductServiceClient {
     @PostConstruct
     private void init() {
         String inventoryServiceUrl = String.format( "%s%s/%s", this.serviceGeneralProtocol, this.inventoryServiceName, this.inventoryServiceBaseUrl );
-        SslContextFactory sslContextFactory = new SslContextFactory.Client();
-        HttpClient httpClient = new HttpClient( sslContextFactory ) {
+        HttpClient httpClient = new HttpClient( ) {
             @Override
             public Request newRequest( URI uri ) {
                 Request request = super.newRequest( uri );

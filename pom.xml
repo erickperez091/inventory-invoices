@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.7.5</version>
         <relativePath/>
     </parent>
     <name>invoices</name>
@@ -17,7 +17,7 @@
     <url>http://www.example.com</url>
 
     <properties>
-        <spring.boot.version>2.2.6.RELEASE</spring.boot.version>
+        <spring.boot.version>2.7.5</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -26,7 +26,7 @@
         <swagger.version>3.0.0</swagger.version>
         <jackson.datatype.version>2.10.3</jackson.datatype.version>
         <spring.cloud.version>Hoxton.SR12</spring.cloud.version>
-        <spring.cloud.dependency.version>2.2.5.RELEASE</spring.cloud.dependency.version>
+        <spring.cloud.dependency.version>2021.0.3</spring.cloud.dependency.version>
     </properties>
     <dependencies>
         <dependency>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-reactive-httpclient</artifactId>
-            <version>1.1.6</version>
+            <version>3.0.7</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -111,7 +111,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
+                <version>${spring.cloud.dependency.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

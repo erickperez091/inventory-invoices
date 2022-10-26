@@ -19,7 +19,7 @@ public class RequestLogEnhancer {
         StringBuilder output = new StringBuilder();
 
         request.onRequestBegin( req -> {
-            output.append( "Request method: " ).append( req.getMethod() ).append( ", URL: " ).append( req.getURI().toString() ).append( "\n" );
+            output.append( "Request method: " ).append( req.getMethod() ).append( ", URL: " ).append( req.getURI().toString() ).append( " " );
         } );
 
         request.onRequestContent( ( req, content ) -> {
