@@ -31,21 +31,17 @@ public class InvoiceConsumer {
         logger.info( "Message received: {}", messageEvent.getEventName() );
         EventType eventType = messageEvent.getEventName();
         switch ( eventType ) {
-            case CREATE_INVOICE: {
+            case CREATE_INVOICE -> {
                 invoiceProcessor.store( messageEvent.getPayload() );
-                break;
             }
-            case UPDATE_INVOICE: {
+            case UPDATE_INVOICE -> {
                 invoiceProcessor.refresh( messageEvent.getPayload() );
-                break;
             }
-            case DELETE_INVOICE: {
+            case DELETE_INVOICE -> {
                 invoiceProcessor.delete( messageEvent.getPayload() );
-                break;
             }
-            case ADD_MODIFY_INVOICE_LINE: {
+            case ADD_MODIFY_INVOICE_LINE -> {
                 invoiceLineProcessor.storeOrRefresh( messageEvent.getPayload() );
-                break;
             }
         }
     }
