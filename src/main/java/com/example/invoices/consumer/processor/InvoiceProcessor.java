@@ -80,12 +80,12 @@ public class InvoiceProcessor {
     private void copyLinesToInvoice( Set< InvoiceLine > invoiceLinesRequest, Set< InvoiceLine > invoiceLinesTarget ) {
         for ( InvoiceLine invoiceLine : invoiceLinesRequest ) {
             Optional< InvoiceLine > optionalInvoiceLine = invoiceLinesTarget.stream().filter( il -> il.getProductId().equalsIgnoreCase( invoiceLine.getProductId() ) ).findFirst();
-            if ( optionalInvoiceLine.isPresent() ) {
-                InvoiceLine invoiceLineTarget = optionalInvoiceLine.get();
+            optionalInvoiceLine.ifPresentOrElse( invoiceLineTarget -> {
                 this.converterUtil.copyProperties( invoiceLine, invoiceLineTarget, "invoice" );
-            } else {
+            }, () ->
+            {
                 invoiceLinesTarget.add( invoiceLine );
-            }
+            } );
         }
     }
 
@@ -106,6 +106,6 @@ public class InvoiceProcessor {
         properties.add( "id" );
         properties.addAll( Arrays.asList( props ) );
         properties.addAll( Arrays.asList( propsToIgnore ) );
-        return properties.toArray( new String[ properties.size() ] );
+        return properties.toArray( new String[ 0 ] );
     }
 }
