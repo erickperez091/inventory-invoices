@@ -1,6 +1,6 @@
 package com.example.invoices.util;
 
-import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.Request;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
 import org.slf4j.Logger;

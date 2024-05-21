@@ -4,9 +4,9 @@ import com.example.common.utilities.ConverterUtil;
 import com.example.invoices.configuration.WebClientFilter;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.service.clients.ProductServiceClient;
+import jakarta.annotation.PostConstruct;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.client.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,34 +69,68 @@ public class ProductServiceClientImpl implements ProductServiceClient {
 
         this.webClient = this.webClientBuilder
                 .baseUrl( inventoryServiceUrl )
-                .clientConnector( new JettyClientHttpConnector( httpClient ) )
+                .clientConnector( new JettyClientHttpConnector(httpClient) )
                 .filter( WebClientFilter.logRequest() )
                 .build();
+        /*this.webClient = this.webClientBuilder
+                .baseUrl( inventoryServiceUrl )
+                .clientConnector( new JettyClientHttpConnector( httpClient ) )
+                .filter( WebClientFilter.logRequest() )
+                .build();*/
     }
 
     @Override
     public void updateProductsInventory( Invoice invoice ) {
+        Map<String, Object> invoiceMap = this.invoiceLineToListMap( invoice );
+
+        Mono<String> result = this.webClient
+                .patch().uri( uriBuilder -> uriBuilder.path( updateInventoryUrl ).build(  ) )
+                .contentType( MediaType.APPLICATION_JSON )
+                .accept( MediaType.APPLICATION_JSON )
+                .body( BodyInserters.fromValue( invoiceMap ) )
+                .exchangeToMono( response -> {
+                    if(response.statusCode().is2xxSuccessful()){
+                        return response.bodyToMono( String.class );
+                    } else if(response.statusCode().is4xxClientError()){
+                        return Mono.just( "There was a 4xx Error" + response.statusCode() );
+                    } else if(response.statusCode().is5xxServerError()){
+                        return Mono.just( "There was a 5xx Error" + response.statusCode() );
+                    } else {
+                        return Mono.empty();
+                    }
+                });
+
+        result.subscribe(s -> {
+            System.out.println("Response FROM products: " + s);
+        });
+
+    }
+
+/*    @Override
+    public void updateProductsInventory( Invoice invoice ) {
 
         Map< String, Object > invoiceMap = this.invoiceLineToListMap( invoice );
 
-        Mono< String > response = this.webClient
+        Mono< String > result = this.webClient
                 .patch()
                 .uri( uriBuilder -> uriBuilder.path( updateInventoryUrl ).build() )
                 .contentType( MediaType.APPLICATION_JSON )
                 .accept( MediaType.APPLICATION_JSON )
                 .body( BodyInserters.fromValue( invoiceMap ) )
-                .exchange()
-                .timeout( Duration.ofSeconds( 3 ) )
-                .flatMap( clientResponse -> {
-                    if ( clientResponse.statusCode().is5xxServerError() ) {
-                        clientResponse.body( ( clientHttpResponse, context ) -> clientHttpResponse.getBody() );
+                .exchangeToMono( (response ) -> {
+                    if(response.statusCode().is5xxServerError()){
+                        return Mono.error(new RuntimeException("Server error"));
                     }
-                    return clientResponse.bodyToMono( String.class );
-                } );
-        response.subscribe( message -> {
+                    else if(response.statusCode().is2xxSuccessful()){
+                        return response.bodyToMono( String.class );
+                    }
+                    return Mono.error(new RuntimeException("Unexpected error"));
+                } )
+                .timeout( Duration.ofSeconds( 3 ) );
+        result.subscribe( message -> {
             System.out.println("RESPONSE FROM SERVER: " + message);
         } );
-    }
+    }*/
 
     private Map< String, Object > invoiceLineToListMap( Invoice invoice ) {
         Map< String, Object > invoiceDTOMap = new HashMap<>();

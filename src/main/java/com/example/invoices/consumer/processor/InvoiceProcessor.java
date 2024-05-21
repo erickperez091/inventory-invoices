@@ -8,7 +8,7 @@ import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.service.InvoiceService;
 import com.example.invoices.service.clients.ProductServiceClient;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
