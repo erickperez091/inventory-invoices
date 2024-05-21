@@ -16,6 +16,9 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 eureka:
   client:
@@ -47,12 +50,15 @@ invoice:
   tax:
     percent: 13
 
-microservice:
-  host: localhost
-  protocol: http://
 product:
-  microservice:
-    base-url: products/v1
-    port: 8081
+  service:
+    name: inventory-service
+    base-url: product/v1
+    update-inventory-url: /products-stock
+
+service:
+  general:
+    protocol: http://
+
 
 

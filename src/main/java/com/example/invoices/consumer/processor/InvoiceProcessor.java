@@ -7,7 +7,8 @@ import com.example.common.utilities.PropertiesUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.service.InvoiceService;
-import org.apache.commons.collections.CollectionUtils;
+import com.example.invoices.service.clients.ProductServiceClient;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,26 +29,29 @@ public class InvoiceProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceProcessor.class );
 
-    private InvoiceService invoiceService;
-    private ConverterUtil converterUtil;
-    private IdUtil idUtil;
-    private PropertiesUtil propertiesUtil;
+    private final InvoiceService invoiceService;
+    private final ConverterUtil converterUtil;
+    private final IdUtil idUtil;
+    private final PropertiesUtil propertiesUtil;
+    private final ProductServiceClient productServiceClient;
 
     @Autowired
-    InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil ) {
+    InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil, ProductServiceClient productServiceClient ) {
         this.invoiceService = invoiceService;
         this.converterUtil = converterUtil;
         this.idUtil = idUtil;
         this.propertiesUtil = propertiesUtil;
+        this.productServiceClient = productServiceClient;
     }
 
-    public void store( Map< String, Object > payload ) {
+    public void store( Map< String, Object > payload ) throws URISyntaxException {
         logger.info( "START | Create Invoice {}", payload );
         Invoice invoice = this.converterUtil.mapToObject( payload, Invoice.class );
         invoice.getInvoiceLines().stream().forEach( invoiceLine -> {
             invoiceLine.setId( this.idUtil.generateId( UUIDType.SHORT ) );
             invoiceLine.setInvoice( invoice );
         } );
+        this.productServiceClient.updateProductsInventory( invoice );
         this.invoiceService.save( invoice );
         logger.info( "FINISH | Create Invoice {}", payload );
     }
@@ -75,12 +80,12 @@ public class InvoiceProcessor {
     private void copyLinesToInvoice( Set< InvoiceLine > invoiceLinesRequest, Set< InvoiceLine > invoiceLinesTarget ) {
         for ( InvoiceLine invoiceLine : invoiceLinesRequest ) {
             Optional< InvoiceLine > optionalInvoiceLine = invoiceLinesTarget.stream().filter( il -> il.getProductId().equalsIgnoreCase( invoiceLine.getProductId() ) ).findFirst();
-            if ( optionalInvoiceLine.isPresent() ) {
-                InvoiceLine invoiceLineTarget = optionalInvoiceLine.get();
+            optionalInvoiceLine.ifPresentOrElse( invoiceLineTarget -> {
                 this.converterUtil.copyProperties( invoiceLine, invoiceLineTarget, "invoice" );
-            } else {
+            }, () ->
+            {
                 invoiceLinesTarget.add( invoiceLine );
-            }
+            } );
         }
     }
 
@@ -101,6 +106,6 @@ public class InvoiceProcessor {
         properties.add( "id" );
         properties.addAll( Arrays.asList( props ) );
         properties.addAll( Arrays.asList( propsToIgnore ) );
-        return properties.toArray( new String[ properties.size() ] );
+        return properties.toArray( new String[ 0 ] );
     }
 }

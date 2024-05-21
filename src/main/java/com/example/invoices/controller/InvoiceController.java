@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping( "/invoice/v1" )
 public class InvoiceController {
 
-    private InvoiceHandler invoiceHandler;
+    private final InvoiceHandler invoiceHandler;
 
     @Autowired
     public InvoiceController( InvoiceHandler invoiceHandler ) {

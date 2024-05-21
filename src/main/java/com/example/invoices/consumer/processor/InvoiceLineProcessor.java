@@ -15,7 +15,7 @@ public class InvoiceLineProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceLineProcessor.class );
     private InvoiceLineService invoiceLineService;
-    private ConverterUtil converterUtil;
+    private final ConverterUtil converterUtil;
 
     @Autowired
     InvoiceLineProcessor( InvoiceLineService invoiceLineService, ConverterUtil converterUtil ) {

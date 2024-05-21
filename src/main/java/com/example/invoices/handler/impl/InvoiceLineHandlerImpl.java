@@ -9,7 +9,7 @@ import com.example.invoices.handler.InvoiceLineHandler;
 import com.example.invoices.producer.InvoiceProducer;
 import com.example.invoices.service.InvoiceLineService;
 import com.example.invoices.service.InvoiceService;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,10 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceLineHandlerImpl.class );
 
-    private InvoiceLineService invoiceLineService;
-    private InvoiceProducer invoiceProducer;
-    private InvoiceService invoiceService;
-    private ConverterUtil converterUtil;
+    private final InvoiceLineService invoiceLineService;
+    private final InvoiceProducer invoiceProducer;
+    private final InvoiceService invoiceService;
+    private final ConverterUtil converterUtil;
 
     @Value( "${invoice.discount.percent:0.0}" )
     private BigDecimal discountPercentage;

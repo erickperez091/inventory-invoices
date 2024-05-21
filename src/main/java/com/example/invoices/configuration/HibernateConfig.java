@@ -2,7 +2,7 @@ package com.example.invoices.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.datatype.hibernate5.jakarta.Hibernate5JakartaModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -22,9 +22,9 @@ public class HibernateConfig {
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = converter.getObjectMapper();
-        Hibernate5Module hibernate5Module = new Hibernate5Module();
+        Hibernate5JakartaModule hibernate5Module = new Hibernate5JakartaModule();
         //hibernate5Module.configure(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true);
-        hibernate5Module.configure( Hibernate5Module.Feature.FORCE_LAZY_LOADING, true );
+        hibernate5Module.configure( Hibernate5JakartaModule.Feature.FORCE_LAZY_LOADING, true );
         mapper.registerModule( hibernate5Module );
         mapper.enable( SerializationFeature.INDENT_OUTPUT );
         mapper.setDateFormat( new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" ) );
