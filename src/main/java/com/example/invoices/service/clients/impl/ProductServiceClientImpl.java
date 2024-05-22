@@ -5,6 +5,7 @@ import com.example.invoices.configuration.WebClientFilter;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.service.clients.ProductServiceClient;
 import jakarta.annotation.PostConstruct;
+import org.apache.commons.collections4.CollectionUtils;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.Request;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -72,11 +72,6 @@ public class ProductServiceClientImpl implements ProductServiceClient {
                 .clientConnector( new JettyClientHttpConnector(httpClient) )
                 .filter( WebClientFilter.logRequest() )
                 .build();
-        /*this.webClient = this.webClientBuilder
-                .baseUrl( inventoryServiceUrl )
-                .clientConnector( new JettyClientHttpConnector( httpClient ) )
-                .filter( WebClientFilter.logRequest() )
-                .build();*/
     }
 
     @Override
@@ -106,37 +101,12 @@ public class ProductServiceClientImpl implements ProductServiceClient {
 
     }
 
-/*    @Override
-    public void updateProductsInventory( Invoice invoice ) {
-
-        Map< String, Object > invoiceMap = this.invoiceLineToListMap( invoice );
-
-        Mono< String > result = this.webClient
-                .patch()
-                .uri( uriBuilder -> uriBuilder.path( updateInventoryUrl ).build() )
-                .contentType( MediaType.APPLICATION_JSON )
-                .accept( MediaType.APPLICATION_JSON )
-                .body( BodyInserters.fromValue( invoiceMap ) )
-                .exchangeToMono( (response ) -> {
-                    if(response.statusCode().is5xxServerError()){
-                        return Mono.error(new RuntimeException("Server error"));
-                    }
-                    else if(response.statusCode().is2xxSuccessful()){
-                        return response.bodyToMono( String.class );
-                    }
-                    return Mono.error(new RuntimeException("Unexpected error"));
-                } )
-                .timeout( Duration.ofSeconds( 3 ) );
-        result.subscribe( message -> {
-            System.out.println("RESPONSE FROM SERVER: " + message);
-        } );
-    }*/
-
     private Map< String, Object > invoiceLineToListMap( Invoice invoice ) {
         Map< String, Object > invoiceDTOMap = new HashMap<>();
         List< Map< String, Object > > productsDTO = new ArrayList<>();
         invoiceDTOMap.put( "invoiceStatus", invoice.getInvoiceStatus().name() );
-        if ( !CollectionUtils.isEmpty( invoice.getInvoiceLines() ) ) {
+        
+        if ( CollectionUtils.isNotEmpty( invoice.getInvoiceLines() ) ) {
             productsDTO = invoice.getInvoiceLines()
                     .stream()
                     .map( invoiceLine -> {
