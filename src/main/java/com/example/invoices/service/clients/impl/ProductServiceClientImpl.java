@@ -105,7 +105,7 @@ public class ProductServiceClientImpl implements ProductServiceClient {
         Map< String, Object > invoiceDTOMap = new HashMap<>();
         List< Map< String, Object > > productsDTO = new ArrayList<>();
         invoiceDTOMap.put( "invoiceStatus", invoice.getInvoiceStatus().name() );
-        
+
         if ( CollectionUtils.isNotEmpty( invoice.getInvoiceLines() ) ) {
             productsDTO = invoice.getInvoiceLines()
                     .stream()
