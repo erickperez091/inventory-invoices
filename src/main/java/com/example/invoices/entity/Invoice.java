@@ -1,6 +1,6 @@
 package com.example.invoices.entity;
 
-import com.example.common.entitty.EnumUtil.InvoiceStatus;
+import com.example.common.entity.EnumUtil.InvoiceStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

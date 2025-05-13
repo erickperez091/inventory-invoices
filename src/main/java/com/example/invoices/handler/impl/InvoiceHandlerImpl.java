@@ -1,8 +1,8 @@
 package com.example.invoices.handler.impl;
 
-import com.example.common.entitty.EnumUtil.EventType;
-import com.example.common.entitty.EnumUtil.UUIDType;
-import com.example.common.entitty.MessageEvent;
+import com.example.common.entity.EnumUtil.EventType;
+import com.example.common.entity.EnumUtil.UUIDType;
+import com.example.common.entity.MessageEvent;
 import com.example.common.utilities.ConverterUtil;
 import com.example.common.utilities.IdUtil;
 import com.example.invoices.entity.Invoice;

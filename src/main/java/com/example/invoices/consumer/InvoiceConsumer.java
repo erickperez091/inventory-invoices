@@ -1,7 +1,7 @@
 package com.example.invoices.consumer;
 
-import com.example.common.entitty.EnumUtil.EventType;
-import com.example.common.entitty.MessageEvent;
+import com.example.common.entity.EnumUtil;
+import com.example.common.entity.MessageEvent;
 import com.example.invoices.consumer.processor.InvoiceLineProcessor;
 import com.example.invoices.consumer.processor.InvoiceProcessor;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class InvoiceConsumer {
     @KafkaListener( topics = { "${topic-name}" } )
     public void handleInvoiceEvent( @Payload final MessageEvent messageEvent ) throws URISyntaxException {
         logger.info( "Message received: {}", messageEvent.getEventName() );
-        EventType eventType = messageEvent.getEventName();
+        EnumUtil.EventType eventType = messageEvent.getEventName();
         switch ( eventType ) {
             case CREATE_INVOICE -> {
                 invoiceProcessor.store( messageEvent.getPayload() );

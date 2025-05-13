@@ -1,7 +1,7 @@
 package com.example.invoices.handler.impl;
 
-import com.example.common.entitty.EnumUtil.EventType;
-import com.example.common.entitty.MessageEvent;
+import com.example.common.entity.EnumUtil.EventType;
+import com.example.common.entity.MessageEvent;
 import com.example.common.utilities.ConverterUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;

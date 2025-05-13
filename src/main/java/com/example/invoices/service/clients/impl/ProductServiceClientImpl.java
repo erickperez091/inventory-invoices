@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.example.invoices.util.RequestLogEnhancer.enhance;
 
@@ -115,7 +114,7 @@ public class ProductServiceClientImpl implements ProductServiceClient {
                         invoiceLineMap.put( "description", invoiceLine.getProductDescription() );
                         invoiceLineMap.put( "units", invoiceLine.getUnits() );
                         return invoiceLineMap;
-                    } ).collect( Collectors.toList() );
+                    } ).toList();
         }
         invoiceDTOMap.put( "products", productsDTO );
 
