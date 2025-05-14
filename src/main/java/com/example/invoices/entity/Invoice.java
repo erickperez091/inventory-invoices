@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,6 +36,9 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME
 //@JsonIdentityInfo(
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
 //       property = "id" )
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Invoice implements Serializable {
 
     @Id
@@ -68,84 +74,6 @@ public class Invoice implements Serializable {
     private Set< InvoiceLine > invoiceLines;
 
 
-    public Invoice( String id, LocalDateTime invoiceDate, BigDecimal invoiceTax, BigDecimal invoiceDiscount, BigDecimal invoiceTotal, BigDecimal invoiceSubTotal, InvoiceStatus invoiceStatus, Set< InvoiceLine > invoiceLines ) {
-        this.id = id;
-        this.invoiceDate = invoiceDate;
-        this.invoiceTax = invoiceTax;
-        this.invoiceDiscount = invoiceDiscount;
-        this.invoiceTotal = invoiceTotal;
-        this.invoiceSubTotal = invoiceSubTotal;
-        this.invoiceStatus = invoiceStatus;
-        this.invoiceLines = invoiceLines;
-    }
-
-    public Invoice() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId( String id ) {
-        this.id = id;
-    }
-
-    public LocalDateTime getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate( LocalDateTime invoiceDate ) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public BigDecimal getInvoiceTax() {
-        return invoiceTax;
-    }
-
-    public void setInvoiceTax( BigDecimal invoiceTax ) {
-        this.invoiceTax = invoiceTax;
-    }
-
-    public BigDecimal getInvoiceDiscount() {
-        return invoiceDiscount;
-    }
-
-    public void setInvoiceDiscount( BigDecimal invoiceDiscount ) {
-        this.invoiceDiscount = invoiceDiscount;
-    }
-
-    public BigDecimal getInvoiceTotal() {
-        return invoiceTotal;
-    }
-
-    public void setInvoiceTotal( BigDecimal invoiceTotal ) {
-        this.invoiceTotal = invoiceTotal;
-    }
-
-    public BigDecimal getInvoiceSubTotal() {
-        return invoiceSubTotal;
-    }
-
-    public void setInvoiceSubTotal( BigDecimal invoiceSubTotal ) {
-        this.invoiceSubTotal = invoiceSubTotal;
-    }
-
-    public InvoiceStatus getInvoiceStatus() {
-        return invoiceStatus;
-    }
-
-    public void setInvoiceStatus( InvoiceStatus invoiceStatus ) {
-        this.invoiceStatus = invoiceStatus;
-    }
-
-    public Set< InvoiceLine > getInvoiceLines() {
-        return invoiceLines;
-    }
-
-    public void setInvoiceLines( Set< InvoiceLine > invoiceLines ) {
-        this.invoiceLines = invoiceLines;
-    }
-
     private void calculateInvoiceSubtotal() {
         this.invoiceSubTotal = BigDecimal.ZERO;
         if ( CollectionUtils.isNotEmpty( invoiceLines ) ) {
@@ -171,34 +99,5 @@ public class Invoice implements Serializable {
         this.calculateTaxTotal( taxesPercentage );
         this.invoiceTotal = this.invoiceSubTotal.subtract( this.invoiceDiscount ).add( this.invoiceTax );
         this.invoiceTotal = this.invoiceTotal.setScale( 2, RoundingMode.HALF_EVEN );
-    }
-
-    @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        Invoice invoice = (Invoice) o;
-        return Objects.equals( id, invoice.id ) &&
-                Objects.equals( invoiceDate, invoice.invoiceDate ) &&
-                invoiceStatus == invoice.invoiceStatus;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( id, invoiceDate, invoiceTax, invoiceDiscount, invoiceTotal, invoiceSubTotal, invoiceStatus );
-    }
-
-    @Override
-    public String toString() {
-        return "Invoice{" +
-                "id='" + id + '\'' +
-                ", invoiceDate=" + invoiceDate +
-                ", invoiceTax=" + invoiceTax +
-                ", invoiceDiscount=" + invoiceDiscount +
-                ", invoiceSubTotal=" + invoiceSubTotal +
-                ", invoiceTotal=" + invoiceTotal +
-                ", invoiceStatus=" + invoiceStatus +
-                ", invoiceLines=" + invoiceLines +
-                '}';
     }
 }

@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,6 +21,9 @@ import java.util.Objects;
 //@JsonIdentityInfo(
 //        generator = ObjectIdGenerators.PropertyGenerator.class,
 //        property = "id")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InvoiceLine implements Serializable {
 
     @Id
@@ -44,102 +51,4 @@ public class InvoiceLine implements Serializable {
     @JsonIgnoreProperties( { "invoiceLines" } )
     private Invoice invoice;
 
-    public InvoiceLine( String id, String productId, String productDescription, int units, BigDecimal productPrice, BigDecimal totalInvoiceLine, Invoice invoice ) {
-        this.id = id;
-        this.productId = productId;
-        this.productDescription = productDescription;
-        this.units = units;
-        this.productPrice = productPrice;
-        this.totalInvoiceLine = totalInvoiceLine;
-        this.invoice = invoice;
-    }
-
-    public InvoiceLine() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId( String id ) {
-        this.id = id;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId( String productId ) {
-        this.productId = productId;
-    }
-
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public void setProductDescription( String productDescription ) {
-        this.productDescription = productDescription;
-    }
-
-    public int getUnits() {
-        return units;
-    }
-
-    public void setUnits( int units ) {
-        this.units = units;
-    }
-
-    public BigDecimal getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice( BigDecimal productPrice ) {
-        this.productPrice = productPrice;
-    }
-
-    public BigDecimal getTotalInvoiceLine() {
-        return totalInvoiceLine;
-    }
-
-    public void setTotalInvoiceLine( BigDecimal totalInvoiceLine ) {
-        this.totalInvoiceLine = totalInvoiceLine;
-    }
-
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice( Invoice invoice ) {
-        this.invoice = invoice;
-    }
-
-    @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        InvoiceLine that = (InvoiceLine) o;
-        return units == that.units &&
-                Objects.equals( id, that.id ) &&
-                Objects.equals( productId, that.productId ) &&
-                Objects.equals( productDescription, that.productDescription ) &&
-                Objects.equals( productPrice, that.productPrice ) &&
-                Objects.equals( totalInvoiceLine, that.totalInvoiceLine );
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( id, productId, productDescription, units, productPrice, totalInvoiceLine );
-    }
-
-    @Override
-    public String toString() {
-        return "InvoiceLine{" +
-                "id='" + id + '\'' +
-                ", productId='" + productId + '\'' +
-                ", productDescription='" + productDescription + '\'' +
-                ", units=" + units +
-                ", productPrice=" + productPrice +
-                ", totalInvoiceLine=" + totalInvoiceLine +
-                '}';
-    }
 }
