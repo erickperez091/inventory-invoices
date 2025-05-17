@@ -2,7 +2,7 @@ package com.example.invoices.controller;
 
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.handler.InvoiceHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping( "/invoice/v1" )
+@RequiredArgsConstructor
 public class InvoiceController {
 
     private final InvoiceHandler invoiceHandler;
-
-    @Autowired
-    public InvoiceController( InvoiceHandler invoiceHandler ) {
-        this.invoiceHandler = invoiceHandler;
-    }
 
     @GetMapping( value = "ping" )
     public ResponseEntity< String > ping() {

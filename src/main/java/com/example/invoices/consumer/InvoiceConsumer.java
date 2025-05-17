@@ -4,9 +4,9 @@ import com.example.common.entity.EnumUtil;
 import com.example.common.entity.MessageEvent;
 import com.example.invoices.consumer.processor.InvoiceLineProcessor;
 import com.example.invoices.consumer.processor.InvoiceProcessor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
@@ -14,17 +14,12 @@ import org.springframework.stereotype.Component;
 import java.net.URISyntaxException;
 
 @Component
+@RequiredArgsConstructor
 public class InvoiceConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceConsumer.class );
     private final InvoiceProcessor invoiceProcessor;
     private final InvoiceLineProcessor invoiceLineProcessor;
-
-    @Autowired
-    InvoiceConsumer( InvoiceProcessor invoiceProcessor, InvoiceLineProcessor invoiceLineProcessor ) {
-        this.invoiceProcessor = invoiceProcessor;
-        this.invoiceLineProcessor = invoiceLineProcessor;
-    }
 
     @KafkaListener( topics = { "${topic-name}" } )
     public void handleInvoiceEvent( @Payload final MessageEvent messageEvent ) throws URISyntaxException {

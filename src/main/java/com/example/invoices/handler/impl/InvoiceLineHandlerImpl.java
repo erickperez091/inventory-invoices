@@ -9,10 +9,10 @@ import com.example.invoices.handler.InvoiceLineHandler;
 import com.example.invoices.producer.InvoiceProducer;
 import com.example.invoices.service.InvoiceLineService;
 import com.example.invoices.service.InvoiceService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceLineHandlerImpl.class );
@@ -39,14 +40,6 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     @Value( "${invoice.tax.percent:0.0}" )
     private BigDecimal taxPercentage;
-
-    @Autowired
-    public InvoiceLineHandlerImpl( InvoiceLineService invoiceLineService, InvoiceProducer invoiceProducer, InvoiceService invoiceService, ConverterUtil converterUtil ) {
-        this.invoiceLineService = invoiceLineService;
-        this.invoiceProducer = invoiceProducer;
-        this.invoiceService = invoiceService;
-        this.converterUtil = converterUtil;
-    }
 
     @Override
     public ResponseEntity< Object > getInvoiceLinesByInvoice( String invoice_id ) {

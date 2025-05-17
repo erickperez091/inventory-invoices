@@ -8,11 +8,11 @@ import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.service.InvoiceService;
 import com.example.invoices.service.clients.ProductServiceClient;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class InvoiceProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger( InvoiceProcessor.class );
@@ -35,14 +36,6 @@ public class InvoiceProcessor {
     private final PropertiesUtil propertiesUtil;
     private final ProductServiceClient productServiceClient;
 
-    @Autowired
-    InvoiceProcessor( InvoiceService invoiceService, ConverterUtil converterUtil, IdUtil idUtil, PropertiesUtil propertiesUtil, ProductServiceClient productServiceClient ) {
-        this.invoiceService = invoiceService;
-        this.converterUtil = converterUtil;
-        this.idUtil = idUtil;
-        this.propertiesUtil = propertiesUtil;
-        this.productServiceClient = productServiceClient;
-    }
 
     public void store( Map< String, Object > payload ) throws URISyntaxException {
         logger.info( "START | Create Invoice {}", payload );

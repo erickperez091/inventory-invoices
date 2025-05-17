@@ -2,18 +2,14 @@ package com.example.invoices.producer;
 
 import com.example.common.entity.MessageEvent;
 import com.example.common.service.KafkaSenderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class InvoiceProducer {
 
     private final KafkaSenderService senderService;
-
-    @Autowired
-    public InvoiceProducer( KafkaSenderService senderService ) {
-        this.senderService = senderService;
-    }
 
     public void sendMessage( MessageEvent messageEvent ) {
         senderService.sendMessage( messageEvent );

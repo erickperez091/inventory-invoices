@@ -5,12 +5,12 @@ import com.example.invoices.configuration.WebClientFilter;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.service.clients.ProductServiceClient;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
@@ -28,6 +28,7 @@ import java.util.Map;
 import static com.example.invoices.util.RequestLogEnhancer.enhance;
 
 @Component
+@RequiredArgsConstructor
 public class ProductServiceClientImpl implements ProductServiceClient {
 
     private static final Logger logger = LoggerFactory.getLogger( ProductServiceClientImpl.class );
@@ -49,11 +50,6 @@ public class ProductServiceClientImpl implements ProductServiceClient {
     @Value( "${product.service.update-inventory-url}" )
     private String updateInventoryUrl;
 
-    @Autowired
-    public ProductServiceClientImpl( WebClient.Builder webClientBuilder, ConverterUtil converterUtil ) {
-        this.webClientBuilder = webClientBuilder;
-        this.converterUtil = converterUtil;
-    }
 
     @PostConstruct
     private void init() {

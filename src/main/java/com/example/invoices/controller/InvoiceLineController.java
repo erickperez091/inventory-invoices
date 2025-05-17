@@ -2,7 +2,7 @@ package com.example.invoices.controller;
 
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.handler.InvoiceLineHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping( "/invoice/v1" )
+@RequiredArgsConstructor
 public class InvoiceLineController {
 
     private final InvoiceLineHandler invoiceLineHandler;
-
-    @Autowired
-    public InvoiceLineController( InvoiceLineHandler invoiceLineHandler ) {
-        this.invoiceLineHandler = invoiceLineHandler;
-    }
 
     @GetMapping( name = "get invoice lines by invoice", path = "/{invoice_id}/lines", value = "/{invoice_id}/lines", produces = { MediaType.APPLICATION_JSON_VALUE } )
     public ResponseEntity< Object > getInvoiceLinesByInvoice( @PathVariable( name = "invoice_id" ) String invoice_id ) {

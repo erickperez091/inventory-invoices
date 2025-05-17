@@ -9,7 +9,7 @@ import com.example.invoices.entity.Invoice;
 import com.example.invoices.handler.InvoiceHandler;
 import com.example.invoices.producer.InvoiceProducer;
 import com.example.invoices.service.InvoiceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class InvoiceHandlerImpl implements InvoiceHandler {
 
     private final InvoiceService invoiceService;
@@ -33,14 +34,6 @@ public class InvoiceHandlerImpl implements InvoiceHandler {
 
     @Value( "${invoice.tax.percent:0.0}" )
     private BigDecimal taxPercentage;
-
-    @Autowired
-    public InvoiceHandlerImpl( InvoiceService invoiceService, InvoiceProducer invoiceProducer, ConverterUtil converterUtil, IdUtil idUtil ) {
-        this.invoiceService = invoiceService;
-        this.invoiceProducer = invoiceProducer;
-        this.converterUtil = converterUtil;
-        this.idUtil = idUtil;
-    }
 
     @Override
     public ResponseEntity< Object > createInvoice( Invoice invoice ) {
