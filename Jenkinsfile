@@ -3,11 +3,11 @@ pipeline {
 
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'develop', description: 'Branch Name')
-        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Artifact version')
+        string(name: 'VERSION', defaultValue: '1.0.1', description: 'Artifact version')
     }
 
     environment {
-        MAVEN_HOME = tool 'Maven 3.9.6'
+        MAVEN_HOME = tool 'Maven 3.9.6' // Ajusta según tu configuración en Jenkins
     }
 
     stages {
@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 configFileProvider([configFile(fileId: 'nexus-settings', variable: 'MAVEN_SETTINGS')]) {
-                    echo "Compiling version ${params.VERSION}"
+                    echo "Building version ${params.VERSION}"
                     sh "${MAVEN_HOME}/bin/mvn clean package -s $MAVEN_SETTINGS"
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
                     groupId: 'com.example',
                     version: "${params.VERSION}",
                     repository: 'maven-test-releases',
-                    credentialsId: 'nexus-creds',
+                    credentialsId: 'nexus-creds', // Asegúrate que existe en Jenkins
                     artifacts: [
                         [
                             artifactId: 'invoices',
