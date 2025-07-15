@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'develop', description: 'Repository Branch')
-        string(name: 'VERSION', defaultValue: '1.0.0', description: 'JAR Version')
+        string(name: 'BRANCH_NAME', defaultValue: 'develop', description: 'Branch Name')
+        string(name: 'VERSION', defaultValue: '1.0.0', description: 'Artifact version')
     }
 
     environment {
@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo "Cloning branch: ${params.BRANCH_NAME}"
+                echo "Cloning branch ${params.BRANCH_NAME}"
                 checkout([$class: 'GitSCM',
                           branches: [[name: "*/${params.BRANCH_NAME}"]],
                           userRemoteConfigs: [[url: 'https://github.com/erickperez091/inventory-invoices.git']]])
@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 configFileProvider([configFile(fileId: 'nexus-settings', variable: 'MAVEN_SETTINGS')]) {
-                    echo "Compiling version: ${params.VERSION}"
+                    echo "Compiling version ${params.VERSION}"
                     sh "${MAVEN_HOME}/bin/mvn clean package -s $MAVEN_SETTINGS"
                 }
             }
