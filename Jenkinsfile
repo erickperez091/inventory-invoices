@@ -6,9 +6,9 @@ pipeline {
         string(name: 'VERSION', defaultValue: '1.0.1', description: 'Artifact version')
     }
 
-    tools {
+/*     tools {
         jdk 'JDK24'
-    }
+    } */
 
     environment {
         MAVEN_HOME = tool 'Maven 3.9.6' // Ajusta según tu configuración en Jenkins
