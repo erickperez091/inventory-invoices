@@ -189,10 +189,5 @@
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
-        <repository>
-            <id>internal-nexus</id>
-            <name>Nexus Repository</name>
-            <url>http://nexus:8081/repository/maven-test-releases/</url>
-        </repository>
     </repositories>
 </project>
