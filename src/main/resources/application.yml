@@ -7,8 +7,8 @@ spring:
     name: invoice-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: s3cr3t_passw0rd
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/invoice?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
+    password: ${DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
     username: root
   jpa:
     hibernate:
@@ -27,6 +27,9 @@ eureka:
   client:
     service-url:
       defaultZone: ${SERVER_DISCOVERY:http://localhost:8761/eureka}
+
+enable:
+  kafka: ${ENABLE_KAFKA:false}
 
 kafka:
   consumer:
