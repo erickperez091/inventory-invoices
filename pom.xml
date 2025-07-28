@@ -22,7 +22,7 @@
         <commons.lib.version>1.0.1</commons.lib.version>
         <swagger.version>3.0.0</swagger.version>
         <jackson.datatype.version>2.10.3</jackson.datatype.version>
-        <spring.cloud.dependency.version>2024.0.1</spring.cloud.dependency.version>
+        <spring.cloud.dependency.version>2024.0.2</spring.cloud.dependency.version>
         <junit.project.version>5.11.4</junit.project.version>
         <lombok.version>1.18.38</lombok.version>
     </properties>
