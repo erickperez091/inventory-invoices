@@ -1,19 +1,17 @@
 package com.example.invoices.util;
 
+import lombok.extern.log4j.Log4j2;
 import org.eclipse.jetty.client.Request;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+@Log4j2
 public class RequestLogEnhancer {
-
-    private static final Logger logger = LoggerFactory.getLogger( RequestLogEnhancer.class );
 
     public static Request enhance( Request request ) {
         StringBuilder output = new StringBuilder();

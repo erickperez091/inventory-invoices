@@ -5,8 +5,7 @@ import com.example.common.entity.MessageEvent;
 import com.example.invoices.consumer.processor.InvoiceLineProcessor;
 import com.example.invoices.consumer.processor.InvoiceProcessor;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,9 @@ import java.net.URISyntaxException;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceConsumer.class );
     private final InvoiceProcessor invoiceProcessor;
     private final InvoiceLineProcessor invoiceLineProcessor;
 

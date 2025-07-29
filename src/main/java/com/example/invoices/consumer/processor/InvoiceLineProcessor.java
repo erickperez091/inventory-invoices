@@ -4,17 +4,16 @@ import com.example.common.utilities.ConverterUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.service.InvoiceLineService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceLineProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceLineProcessor.class );
     private final InvoiceLineService invoiceLineService;
     private final ConverterUtil converterUtil;
 

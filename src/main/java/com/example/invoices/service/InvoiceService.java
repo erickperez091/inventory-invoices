@@ -3,8 +3,7 @@ package com.example.invoices.service;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +12,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceService {
-
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceService.class );
 
     private final InvoiceRepository repository;
 

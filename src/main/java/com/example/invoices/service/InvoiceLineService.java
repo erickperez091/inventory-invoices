@@ -4,8 +4,7 @@ import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.repository.InvoiceLineRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +12,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceLineService {
 
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceLineService.class );
 
     private final InvoiceLineRepository repository;
 

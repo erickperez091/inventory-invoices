@@ -9,10 +9,9 @@ import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.service.InvoiceService;
 import com.example.invoices.service.clients.ProductServiceClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +25,8 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceProcessor {
-
-    private static final Logger logger = LoggerFactory.getLogger( InvoiceProcessor.class );
 
     private final InvoiceService invoiceService;
     private final ConverterUtil converterUtil;

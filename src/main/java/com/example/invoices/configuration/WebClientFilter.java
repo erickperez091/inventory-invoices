@@ -1,13 +1,12 @@
 package com.example.invoices.configuration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 public class WebClientFilter{
-    private static final Logger logger = LoggerFactory.getLogger( WebClientFilter.class );
 
     private static void logMethodAndUrl( ClientRequest request) {
         StringBuilder sb = new StringBuilder();

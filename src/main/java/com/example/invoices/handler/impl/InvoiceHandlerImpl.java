@@ -10,6 +10,7 @@ import com.example.invoices.handler.InvoiceHandler;
 import com.example.invoices.producer.InvoiceProducer;
 import com.example.invoices.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class InvoiceHandlerImpl implements InvoiceHandler {
 
     private final InvoiceService invoiceService;
