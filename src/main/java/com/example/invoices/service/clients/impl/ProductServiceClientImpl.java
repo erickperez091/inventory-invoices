@@ -1,7 +1,7 @@
 package com.example.invoices.service.clients.impl;
 
+import com.example.common.configuration.WebClientFilter;
 import com.example.common.utilities.ConverterUtil;
-import com.example.invoices.configuration.WebClientFilter;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.service.clients.ProductServiceClient;
 import jakarta.annotation.PostConstruct;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.invoices.util.RequestLogEnhancer.enhance;
+import static com.example.common.utilities.RequestLogEnhancer.enhance;
 
 @Component
 @RequiredArgsConstructor

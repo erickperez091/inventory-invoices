@@ -31,12 +31,13 @@ eureka:
 enable:
   kafka: ${ENABLE_KAFKA:false}
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: 300000
-
 security:
   enabled: ${SECURITY_ENABLED:false}
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 300000
+  public:
+    url:
 
 kafka:
   consumer:
