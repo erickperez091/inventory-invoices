@@ -6,7 +6,7 @@ import com.example.common.utilities.ConverterUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
 import com.example.invoices.handler.InvoiceLineHandler;
-import com.example.invoices.producer.InvoiceProducer;
+import com.example.invoices.messaging.InvoicePublisher;
 import com.example.invoices.service.InvoiceLineService;
 import com.example.invoices.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
 
     private final InvoiceLineService invoiceLineService;
-    private final InvoiceProducer invoiceProducer;
+    private final InvoicePublisher invoicePublisher;
     private final InvoiceService invoiceService;
     private final ConverterUtil converterUtil;
 
@@ -71,7 +71,7 @@ public class InvoiceLineHandlerImpl implements InvoiceLineHandler {
         invoiceFromDb.calculateTotal( discountPercentage, taxPercentage );
         Map< String, Object > payload = this.converterUtil.objectToMap( invoiceFromDb );
         MessageEvent messageEvent = new MessageEvent( EventType.UPDATE_INVOICE, payload );
-        invoiceProducer.sendMessage( messageEvent );
+        this.invoicePublisher.sendEvent( messageEvent );
         return new ResponseEntity<>( invoiceFromDb, HttpStatus.FOUND );
     }
 }

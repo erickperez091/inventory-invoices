@@ -2,7 +2,8 @@ package com.example.invoices.consumer.processor;
 
 import com.example.common.entity.EnumUtil.UUIDType;
 import com.example.common.utilities.ConverterUtil;
-import com.example.common.utilities.IdUtil;
+import com.example.common.utilities.IdGeneratorService;
+import com.example.common.utilities.impl.FriendlyIdServiceImpl;
 import com.example.common.utilities.PropertiesUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;
@@ -30,7 +31,7 @@ public class InvoiceProcessor {
 
     private final InvoiceService invoiceService;
     private final ConverterUtil converterUtil;
-    private final IdUtil idUtil;
+    private final IdGeneratorService idGeneratorService;
     private final PropertiesUtil propertiesUtil;
     private final ProductServiceClient productServiceClient;
 
@@ -39,7 +40,7 @@ public class InvoiceProcessor {
         logger.info( "START | Create Invoice {}", payload );
         Invoice invoice = this.converterUtil.mapToObject( payload, Invoice.class );
         invoice.getInvoiceLines().stream().forEach( invoiceLine -> {
-            invoiceLine.setId( this.idUtil.generateId( UUIDType.SHORT ) );
+            invoiceLine.setId( this.idGeneratorService.generateId( UUIDType.SHORT ) );
             invoiceLine.setInvoice( invoice );
         } );
         this.productServiceClient.updateProductsInventory( invoice );
@@ -84,7 +85,7 @@ public class InvoiceProcessor {
         if ( CollectionUtils.isNotEmpty( invoice.getInvoiceLines() ) ) {
             invoice.getInvoiceLines().forEach( invoiceLine -> {
                 if ( StringUtils.isBlank( invoiceLine.getId() ) ) {
-                    invoiceLine.setId( this.idUtil.generateId( UUIDType.SHORT ) );
+                    invoiceLine.setId( this.idGeneratorService.generateId( UUIDType.SHORT ) );
                 }
                 invoiceLine.setInvoice( invoice );
             } );
