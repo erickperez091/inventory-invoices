@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.4</version>
         <relativePath/>
     </parent>
     <name>invoices</name>
@@ -22,8 +22,8 @@
         <commons.lib.version>1.0.1</commons.lib.version>
         <swagger.version>3.0.0</swagger.version>
         <jackson.datatype.version>2.10.3</jackson.datatype.version>
-        <spring.cloud.dependency.version>2024.0.2</spring.cloud.dependency.version>
-        <junit.project.version>5.11.4</junit.project.version>
+        <spring.cloud.dependency.version>2025.0.0</spring.cloud.dependency.version>
+        <!--<junit.project.version>5.11.4</junit.project.version>-->
         <lombok.version>1.18.38</lombok.version>
     </properties>
     <dependencies>
@@ -125,7 +125,14 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--<dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.project.version}</version>
@@ -136,7 +143,7 @@
             <artifactId>junit-vintage-engine</artifactId>
             <version>${junit.project.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <dependencyManagement>
         <dependencies>

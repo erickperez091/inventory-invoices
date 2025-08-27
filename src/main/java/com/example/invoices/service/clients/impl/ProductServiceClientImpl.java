@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.Request;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
@@ -31,6 +32,7 @@ import static com.example.common.utilities.RequestLogEnhancer.enhance;
 @Log4j2
 public class ProductServiceClientImpl implements ProductServiceClient {
 
+    @Qualifier("webClientLoadBalanced")
     private final WebClient.Builder webClientBuilder;
     private final ConverterUtil converterUtil;
 
@@ -114,5 +116,4 @@ public class ProductServiceClientImpl implements ProductServiceClient {
 
         return invoiceDTOMap;
     }
-
 }

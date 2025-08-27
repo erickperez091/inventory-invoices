@@ -2,6 +2,7 @@ package com.example.invoices.consumer;
 
 import com.example.common.entity.EnumUtil;
 import com.example.common.entity.MessageEvent;
+import com.example.common.service.messaging.MessagingCosumer;
 import com.example.invoices.consumer.processor.InvoiceLineProcessor;
 import com.example.invoices.consumer.processor.InvoiceProcessor;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +16,22 @@ import java.net.URISyntaxException;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class InvoiceConsumer {
+public class InvoiceConsumer implements MessagingCosumer {
 
     private final InvoiceProcessor invoiceProcessor;
     private final InvoiceLineProcessor invoiceLineProcessor;
 
-    @KafkaListener( topics = { "${topic-name}" } )
-    public void handleInvoiceEvent( @Payload final MessageEvent messageEvent ) throws URISyntaxException {
+    @Override
+    public void consume(MessageEvent messageEvent) {
         logger.info( "Message received: {}", messageEvent.getEventName() );
         EnumUtil.EventType eventType = messageEvent.getEventName();
         switch ( eventType ) {
             case CREATE_INVOICE -> {
-                invoiceProcessor.store( messageEvent.getPayload() );
+                try {
+                    invoiceProcessor.store( messageEvent.getPayload() );
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
             }
             case UPDATE_INVOICE -> {
                 invoiceProcessor.refresh( messageEvent.getPayload() );
@@ -39,5 +44,4 @@ public class InvoiceConsumer {
             }
         }
     }
-
 }

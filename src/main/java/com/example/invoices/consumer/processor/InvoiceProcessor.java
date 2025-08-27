@@ -3,7 +3,6 @@ package com.example.invoices.consumer.processor;
 import com.example.common.entity.EnumUtil.UUIDType;
 import com.example.common.utilities.ConverterUtil;
 import com.example.common.utilities.IdGeneratorService;
-import com.example.common.utilities.impl.FriendlyIdServiceImpl;
 import com.example.common.utilities.PropertiesUtil;
 import com.example.invoices.entity.Invoice;
 import com.example.invoices.entity.InvoiceLine;

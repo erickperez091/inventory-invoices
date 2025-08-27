@@ -1,7 +1,6 @@
 server:
   port: 9081
 
-
 spring:
   application:
     name: invoice-service
@@ -28,8 +27,18 @@ eureka:
     service-url:
       defaultZone: ${SERVER_DISCOVERY:http://localhost:8761/eureka}
 
-enable:
-  kafka: ${ENABLE_KAFKA:false}
+messaging:
+  provider: ${MESSAGING_PROVIDER:kafka}
+  kafka:
+    client-id: ${KAFKA_CLIENT_ID:invoices-service}
+    topic: ${KAFKA_TOPIC:invoices}
+    group-id: ${KAFKA_GROUP_ID:invoices-service}
+    max-poll-records: ${KAFKA_MAX_POLL_RECORDS:1}
+  kinesis:
+    stream-name: ${KINESIS_STREAM_NAME:invoices}
+    region: ${KINESIS_REGION:us-east-1}
+    endpoint-override: ${ENDPOINT_OVERRIDE:http://localhost:4566}
+    async-native: ${KINESIS_ASYNC:false}
 
 security:
   enabled: ${SECURITY_ENABLED:false}
@@ -44,9 +53,6 @@ kafka:
     client-id: invoices
   max:
     poll:
-
-
-topic-name: invoices
 
 logging:
   level:
